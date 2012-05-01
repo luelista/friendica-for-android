@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content" android:layout_height="wrap_content"
+android:orientation="vertical">
+	
+	<LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"
+	  android:id="@+id/top_control_bar">
+
+			    <RelativeLayout android:background="@drawable/header_gradient" android:layout_width="fill_parent" android:orientation="horizontal"
+					android:layout_height="wrap_content">
+						<include layout="@layout/header_logo" />
+					  
+						<TextView android:text="@string/upload_file" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			    			  android:textColor="#000" android:layout_toRightOf="@id/header_logo" android:layout_alignBaseline="@id/header_logo"></TextView>
+			    	
+						<!-- <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_sdcard" android:layout_toLeftOf="@+id/btn_upload_photo" android:layout_width="wrap_content" android:src="@drawable/sdcard"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_photo" android:layout_alignParentRight="true"  android:layout_width="wrap_content" android:src="@drawable/photo"></ImageButton>
+						-->
+					</RelativeLayout>
+			    
+			    <LinearLayout android:paddingLeft="10dip" android:paddingTop="5dip" android:paddingBottom="5dip" android:background="@drawable/subheader_gradient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+			    	<!-- 
+			    	<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_select_clipboard" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageButton>
+						 -->
+						 
+						<ImageView android:layout_height="wrap_content" android:id="@+id/profile_image" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageView>
+						
+			    	<TextView android:id="@+id/selected_clipboard" android:text="@string/loading_data" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			    			  android:textColor="#fff"></TextView>
+			    	
+			    </LinearLayout>
+			    
+			    
+			    
+	</LinearLayout>
+	
+	
+	<LinearLayout android:id="@+id/bottom_control_bar" android:orientation="vertical"
+	android:layout_width="match_parent" android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true">
+		<LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+			<!-- 
+			<TextView android:text="Name: " android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+			<EditText android:id="@+id/txt_filename" android:layout_width="match_parent" android:layout_height="wrap_content"></EditText>
+			 -->
+			<ImageView android:layout_height="200dp" android:maxHeight="200dp" android:id="@+id/preview" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageView>
+		</LinearLayout>
+		<RelativeLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/footer_gradient">
+			<!-- <Button android:layout_width="wrap_content" android:id="@+id/btn_new_dir"
+			android:layout_height="wrap_content" android:text="Neuer Ordner" /> -->
+			<Button android:layout_width="wrap_content" android:id="@+id/btn_upload" android:paddingLeft="60dp" android:paddingRight="60dp"
+			android:layout_height="wrap_content" android:text="@string/upload_now" android:layout_centerInParent="true" />
+		</RelativeLayout>
+	</LinearLayout>
+	
+	<EditText android:id="@+id/maintb" android:layout_width="match_parent" android:gravity="top"
+	android:layout_height="wrap_content" android:text="File upload selected. Coming soon.\n\nBitte Menütaste drücken !!!"
+	android:layout_below="@id/top_control_bar" android:layout_above="@id/bottom_control_bar" />
+</RelativeLayout>

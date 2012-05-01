@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.wikilab.android.friendica01"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    
+		<!-- PERMISSIONS -->
+		<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+		
+		
+		
+		
+    <uses-sdk android:minSdkVersion="9" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        
+        
+				<!-- SERVICES -->
+				<service android:name=".FileUploadService"></service>
+				
+        
+				<!-- ACTIVIIES -->
+				
+        <activity
+            android:name=".FriendicaImgUploadActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+						<intent-filter android:label="@string/intf_fileupload2">
+		            <action android:name="android.intent.action.SEND" />
+		            <category android:name="android.intent.category.DEFAULT" />
+		            <!--  all available mime types according to http://de.selfhtml.org/diverses/mimetypen.htm#allgemeines -->
+								<data android:mimeType="text/*"/>
+								<data android:mimeType="image/*"/>
+								<data android:mimeType="video/*"/>
+								<data android:mimeType="audio/*"/>
+								<data android:mimeType="application/*"/>
+								<data android:mimeType="multipart/*"/>
+								<data android:mimeType="message/*"/>
+								<data android:mimeType="model/*"/>
+		        </intent-filter>
+        </activity>
+        
+			
+			
+    </application>
+
+</manifest>

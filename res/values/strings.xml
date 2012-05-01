@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, FriendicaImgUploadActivity!</string>
+    <string name="app_name">Friendica Image Upload</string>
+    <string name="intf_fileupload2">Post to Friendica</string>
+
+    <string name="loading_data">Loading&#8230;</string>
+    
+    <string name="server">Server</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    
+    <string name="app_title_html">Friendica</string>
+    
+    <string name="upload_file">Upload a photo</string>
+    <string name="upload_now">Start upload</string>
+</resources>
