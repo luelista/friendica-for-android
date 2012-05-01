@@ -360,9 +360,10 @@ public class TwAjax extends Thread {
 
 		//generate auth header if user/pass are provided to this class
 		if (this.myHttpAuthUser != null) {
-			connection.setRequestProperty("Authorization", "Basic "+Base64.encodeToString((this.myHttpAuthUser+":"+this.myHttpAuthPass).getBytes(), Base64.DEFAULT));
+			connection.setRequestProperty("Authorization", "Basic "+Base64.encodeToString((this.myHttpAuthUser+":"+this.myHttpAuthPass).getBytes(), Base64.NO_WRAP));
 		}
-
+		//Log.i("Andfrnd","-->"+connection.getRequestProperty("Authorization")+"<--");
+		
 		connection.setRequestProperty("Host", url.getHost());
 		connection.setRequestProperty("Connection", "Keep-Alive");
 		connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
