@@ -113,6 +113,13 @@ public class FileUploadService extends IntentService {
 		
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		 */
+		
+		//Define the Notification's expanded message and Intent:
+		Context context = getApplicationContext();
+		PendingIntent nullIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
+		notification.setLatestEventInfo(context, tickerText, "Click to dismiss", nullIntent);
+		
+		
 		//Pass the Notification to the NotificationManager:
 
 		mNotificationManager.notify(UPLOAD_SUCCESS_ID, notification);
