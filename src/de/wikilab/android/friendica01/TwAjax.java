@@ -16,23 +16,26 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONTokener;
+import org.w3c.dom.Document;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -46,6 +49,18 @@ import android.util.Log;
 
 public class TwAjax extends Thread {
 	
+	{
+		java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);
+		//java.util.logging.Logger.getLogger("org.apache.http.headers").setLevel(java.util.logging.Level.FINEST);
+
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+		System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "debug");
+		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "debug");
+		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.headers", "debug");
+
+	}
+	
 	private Runnable myCallback;
 	private Handler myHandler;
 	private String myMethod;
@@ -58,11 +73,15 @@ public class TwAjax extends Thread {
 	private String twSession;
 	private List<PostFile> myPostFiles;
 	private boolean convertToBitmap = false;
+	private boolean convertToXml = false;
 	private String downloadToFile = null;
 	private Bitmap myBmpResult;
 	private String myHttpAuthUser, myHttpAuthPass;
+	private Document myXmlDocument;
 	private String myProxyIp, myProxyUsername, myProxyPassword;
 	private int myProxyPort;
+	private static final BasicCookieStore cookieStoreManager = new BasicCookieStore();
+	
 	
 	public static class PostFile {
 		public static final int MAX_BUFFER_SIZE = 1*1024*1024;
@@ -254,6 +273,9 @@ public class TwAjax extends Thread {
 	public Bitmap getBitmapResult() {
 		return myBmpResult;
 	}
+	public Document getXmlDocumentResult() {
+		return myXmlDocument;
+	}
 	
 	public void run() {
         try {
@@ -300,10 +322,11 @@ public class TwAjax extends Thread {
         }
         m.addHeader("Host", m.getURI().getHost());
         if (twSession != null) m.addHeader("Cookie", "twnetSID=" + twSession);
+        httpclient.setCookieStore(cookieStoreManager);
         
 		//generate auth header if user/pass are provided to this class
 		if (this.myHttpAuthUser != null) {
-			m.addHeader("Authorization", "Basic "+Base64.encodeToString((this.myHttpAuthUser+":"+this.myHttpAuthPass).getBytes(), Base64.DEFAULT));
+			m.addHeader("Authorization", "Basic "+Base64.encodeToString((this.myHttpAuthUser+":"+this.myHttpAuthPass).getBytes(), Base64.NO_WRAP));
 		}
         // Execute HTTP Get/Post Request
         HttpResponse response = httpclient.execute(m);
@@ -330,6 +353,15 @@ public class TwAjax extends Thread {
             input.close();
         } else if (this.convertToBitmap) {
         	myBmpResult = BitmapFactory.decodeStream(response.getEntity().getContent());
+        } else if (this.convertToXml) {
+        	try {
+				myXmlDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(response.getEntity().getContent());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+        	
         } else {
             myResult = EntityUtils.toString(response.getEntity(), "UTF-8");
         }
@@ -437,6 +469,18 @@ public class TwAjax extends Thread {
 		this.myUrl = url;
 		this.myCallback = callback;
 		this.convertToBitmap = true;
+		if (callback != null) {
+			this.myHandler = new Handler();
+			this.start();
+		} else {
+			this.run();
+		}
+	}
+	public void getUrlXmlDocument(String url, Runnable callback) {
+		this.myMethod = "GET";
+		this.myUrl = url;
+		this.myCallback = callback;
+		this.convertToXml = true;
 		if (callback != null) {
 			this.myHandler = new Handler();
 			this.start();

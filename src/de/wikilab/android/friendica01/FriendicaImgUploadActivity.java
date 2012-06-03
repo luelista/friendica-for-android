@@ -17,12 +17,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class FriendicaImgUploadActivity extends Activity {
+public class FriendicaImgUploadActivity extends Activity implements LoginListener {
 
 	public final static int RQ_SELECT_CLIPBOARD = 1;
 	
@@ -43,13 +46,13 @@ public class FriendicaImgUploadActivity extends Activity {
 
         setContentView(R.layout.uploadfile);
         
-
+        
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String userName = prefs.getString("login_user", null);
 		if (userName == null || userName.length() < 1) {
-			showLoginForm(null);
+			Max.showLoginForm(this, null);
 		} else {
-			tryLogin();
+			Max.tryLogin(this);
 		}
         
         /*
@@ -140,89 +143,10 @@ public class FriendicaImgUploadActivity extends Activity {
 		//
 	}
 	
-	
-	public void tryLogin() {
-		final ProgressDialog pd = new ProgressDialog(this);
-		pd.show();		
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String server = prefs.getString("login_server", null);
-		
-		final TwAjax t = new TwAjax(this, true, true);
-		t.getUrlContent("http://"+server+"/api/account/verify_credentials", new Runnable() {
-			@Override
-			public void run() {
-				pd.dismiss();
-				try {
-					if (t.isSuccess()) {
-						if (t.getHttpCode() == 200) {
-							JSONObject r = (JSONObject) t.getJsonResult();
-							String name = r.getString("name");
-							((TextView)findViewById(R.id.selected_clipboard)).setText(name);
-							
-							final TwAjax profileImgDl = new TwAjax();
-							final String targetFs = getCacheDir()+"/"+r.getString("id")+".jpg";
-							profileImgDl.urlDownloadToFile(r.getString("profile_image_url"), targetFs, new Runnable() {
-								@Override
-								public void run() {
-									((ImageView)findViewById(R.id.profile_image)).setImageURI(Uri.parse("file://"+targetFs));
-								}
-							});
-							
-							
-						} else {
-							showLoginForm("Error:"+t.getResult());
-						}
-					} else {
-						
-						showLoginForm("ERR:"+t.getError().toString());
-					}
-					
-				} catch(Exception ex) {
-					showLoginForm("ERR2:"+t.getResult()+ex.toString());
-					
-				}
-			}
-		});
-	}
-	
-	public void showLoginForm(String errmes) {
-		View myView = getLayoutInflater().inflate(R.layout.loginscreen, null, false);
-		final AlertDialog alert = new AlertDialog.Builder(this)
-		.setTitle("Login to Friendica")
-		.setView(myView)
-		.show();
+	@Override
+	public void OnLogin() {
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String server = prefs.getString("login_server", null);
-		String userName = prefs.getString("login_user", null);
-		
-		if (errmes != null) {
-			((TextView)myView.findViewById(R.id.lblInfo)).setText(errmes);
-		}
-		
-		final EditText edtServer = (EditText)myView.findViewById(R.id.edtServer);
-		edtServer.setText(server);
-		
-		final EditText edtUser = (EditText)myView.findViewById(R.id.edtUser);
-		edtUser.setText(userName);
-
-		final EditText edtPassword = (EditText)myView.findViewById(R.id.edtPassword);
-		
-		((Button)myView.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(FriendicaImgUploadActivity.this).edit();
-				prefs.putString("login_server", edtServer.getText().toString());
-				prefs.putString("login_user", edtUser.getText().toString());
-				prefs.putString("login_password", edtPassword.getText().toString());
-				prefs.commit();
-				
-				alert.dismiss();
-				
-				tryLogin();
-			}
-		});
 	}
 	
     @Override

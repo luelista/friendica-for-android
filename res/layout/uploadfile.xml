@@ -24,14 +24,11 @@ android:orientation="vertical">
 					</RelativeLayout>
 			    
 			    <LinearLayout android:paddingLeft="10dip" android:paddingTop="5dip" android:paddingBottom="5dip" android:background="@drawable/subheader_gradient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-			    	<!-- 
-			    	<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_select_clipboard" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageButton>
-						 -->
-						 
-						<ImageView android:layout_height="wrap_content" android:id="@+id/profile_image" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageView>
+			    	
+						<ImageView android:layout_height="35dp" android:id="@+id/profile_image" android:layout_width="35dp" android:src="@drawable/ic_menu_archive"></ImageView>
 						
 			    	<TextView android:id="@+id/selected_clipboard" android:text="@string/loading_data" android:layout_width="wrap_content" android:layout_height="wrap_content"
-			    			  android:textColor="#fff"></TextView>
+			    			  android:textColor="#fff" android:paddingLeft="10dp"></TextView>
 			    	
 			    </LinearLayout>
 			    

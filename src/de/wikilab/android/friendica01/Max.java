@@ -7,8 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,6 +26,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spannable;
@@ -27,6 +35,10 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Max {
@@ -39,6 +51,111 @@ public class Max {
 		new File(DATA_DIR).mkdirs();
 		new File(IMG_CACHE_DIR).mkdirs();
 		
+	}
+	
+	
+
+	/**
+	 * 
+	 * @param ctx     MUST IMPLEMENT LoginListener !!!
+	 * @param errmes
+	 */
+	public static void tryLogin(final Activity ctx) {
+		final ProgressDialog pd = new ProgressDialog(ctx);
+		pd.show();		
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String server = prefs.getString("login_server", null);
+		
+		final TwAjax t = new TwAjax(ctx, true, true);
+		t.getUrlContent("http://"+server+"/api/account/verify_credentials", new Runnable() {
+			@Override
+			public void run() {
+				pd.dismiss();
+				try {
+					if (t.isSuccess()) {
+						if (t.getHttpCode() == 200) {
+							JSONObject r = (JSONObject) t.getJsonResult();
+							String name = r.getString("name");
+							((TextView)ctx.findViewById(R.id.selected_clipboard)).setText(name);
+
+							((LoginListener) ctx).OnLogin();
+							
+							
+							final TwAjax profileImgDl = new TwAjax();
+							final String targetFs = ctx.getCacheDir()+"/"+r.getString("id")+".jpg";
+							profileImgDl.urlDownloadToFile(r.getString("profile_image_url"), targetFs, new Runnable() {
+								@Override
+								public void run() {
+									((ImageView)ctx.findViewById(R.id.profile_image)).setImageURI(Uri.parse("file://"+targetFs));
+								}
+							});
+							
+							
+						} else {
+							showLoginForm(ctx, "Error:"+t.getResult());
+						}
+					} else {
+						
+						showLoginForm(ctx, "ERR:"+t.getError().toString());
+					}
+					
+				} catch(Exception ex) {
+					showLoginForm(ctx, "ERR2:"+t.getResult()+ex.toString());
+					
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 
+	 * @param ctx     MUST IMPLEMENT LoginListener !!!
+	 * @param errmes
+	 */
+	public static void showLoginForm(final Activity ctx, String errmes) {
+		View myView = ctx.getLayoutInflater().inflate(R.layout.loginscreen, null, false);
+		final AlertDialog alert = new AlertDialog.Builder(ctx)
+		.setTitle("Login to Friendica")
+		.setView(myView)
+		.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				ctx.finish();
+			}
+		})
+		.show();
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String server = prefs.getString("login_server", null);
+		String userName = prefs.getString("login_user", null);
+		
+		if (errmes != null) {
+			((TextView)myView.findViewById(R.id.lblInfo)).setText(errmes);
+		}
+		
+		final EditText edtServer = (EditText)myView.findViewById(R.id.edtServer);
+		edtServer.setText(server);
+		
+		final EditText edtUser = (EditText)myView.findViewById(R.id.edtUser);
+		edtUser.setText(userName);
+
+		final EditText edtPassword = (EditText)myView.findViewById(R.id.edtPassword);
+		
+		((Button)myView.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
+				prefs.putString("login_server", edtServer.getText().toString());
+				prefs.putString("login_user", edtUser.getText().toString());
+				prefs.putString("login_password", edtPassword.getText().toString());
+				prefs.commit();
+				
+				alert.dismiss();
+				
+				tryLogin(ctx);
+			}
+		});
 	}
 	
 	//warum muss das in Android so kompliziert sein???

@@ -3,6 +3,7 @@
 
     <string name="hello">Hello World!</string>
     <string name="timeline">Timeline</string>
+    <string name="notifications">Notifications</string>
     <string name="app_name">Friendica</string>
     <string name="intf_fileupload2">Friendica</string>
 
