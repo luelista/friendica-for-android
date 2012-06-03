@@ -286,10 +286,15 @@ public class Max {
 		}
 
 		private File getImageFile(ImageSpan img) {
-			return new File(IMG_CACHE_DIR + "/url_" + img.getSource().replaceAll("[^a-z0-9.-]", "_"));
+			return new File(IMG_CACHE_DIR + "/url_" + Max.cleanFilename(img.getSource()));
 		}
 
 	}
 
+	public static String cleanFilename(String url) {
+		return url.replaceAll("[^a-z0-9.-]", "_");
+		
+	}
+	
 
 }

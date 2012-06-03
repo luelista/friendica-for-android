@@ -1,11 +1,12 @@
 package de.wikilab.android.friendica01;
 
+import java.io.File;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,13 +40,28 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			String piurl = post.getJSONObject("user").getString("profile_image_url");
 			Log.i(TAG, "Going to download profile img: " + piurl);
 			final TwAjax pidl = new TwAjax(getContext(), true, false);
-			pidl.getUrlBitmap(piurl, new Runnable() {
+			
+			//OLD: uncached, download every time, annoying when scrolling fast!
+			/*pidl.getUrlBitmap(piurl, new Runnable() {
 				@Override
 				public void run() {
 					
 					profileImage.setImageBitmap(pidl.getBitmapResult());
 				}
-			});
+			});*/
+			
+			//NEW: download cached
+			final File pifile = new File(Max.IMG_CACHE_DIR + "/pi_" + Max.cleanFilename(piurl));
+			if (pifile.isFile()) {
+				profileImage.setImageURI(Uri.parse("file://" + pifile.getAbsolutePath()));
+			} else {
+				pidl.urlDownloadToFile(piurl, pifile.getAbsolutePath(), new Runnable() {
+					@Override
+					public void run() {
+						profileImage.setImageURI(Uri.parse("file://" + pifile.getAbsolutePath()));
+					}
+				});
+			}
 		} catch (JSONException e) {
 		}
 

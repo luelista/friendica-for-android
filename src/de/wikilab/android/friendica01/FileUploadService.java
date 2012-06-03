@@ -163,7 +163,7 @@ public class FileUploadService extends IntentService {
 		String fileSpec = Max.getRealPathFromURI(FileUploadService.this, fileToUpload);
 		
 
-		String tempFile = getCacheDir() + "/imgUploadTemp_" + System.currentTimeMillis() + ".jpg";
+		String tempFile = Max.IMG_CACHE_DIR + "/imgUploadTemp_" + System.currentTimeMillis() + ".jpg";
 		Max.resizeImage(fileSpec, tempFile, 1024,768);
 		
 		try {
