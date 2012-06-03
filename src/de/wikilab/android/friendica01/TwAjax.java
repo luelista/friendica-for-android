@@ -285,6 +285,8 @@ public class TwAjax extends Thread {
     }  
 	
 	private void runDefault() throws IOException {
+		Log.v("TwAjax", "runDefault URL="+myUrl);
+		
 		// Create a new HttpClient and Get/Post Header
 		DefaultHttpClient httpclient = new DefaultHttpClient();
         setHttpClientProxy(httpclient);
@@ -308,6 +310,7 @@ public class TwAjax extends Thread {
         //InputStream is = response.getEntity().getContent();
         myHttpStatus = response.getStatusLine().getStatusCode();
         if (this.downloadToFile != null) {
+        	Log.v("TwAjax", "runDefault downloadToFile="+downloadToFile);
             // download the file
             InputStream input = new BufferedInputStream(response.getEntity().getContent());
             OutputStream output = new FileOutputStream(downloadToFile);
