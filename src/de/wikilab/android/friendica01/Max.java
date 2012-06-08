@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -83,7 +84,7 @@ public class Max {
 							
 							
 							final TwAjax profileImgDl = new TwAjax();
-							final String targetFs = ctx.getCacheDir()+"/"+r.getString("id")+".jpg";
+							final String targetFs = IMG_CACHE_DIR+"/my_profile_pic_"+r.getString("id")+".jpg";
 							profileImgDl.urlDownloadToFile(r.getString("profile_image_url"), targetFs, new Runnable() {
 								@Override
 								public void run() {
@@ -141,6 +142,13 @@ public class Max {
 		edtUser.setText(userName);
 
 		final EditText edtPassword = (EditText)myView.findViewById(R.id.edtPassword);
+		
+		((TextView)myView.findViewById(R.id.proxy_settings)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ctx.startActivity(new Intent(ctx, PreferencesActivity.class));
+			}
+		});
 		
 		((Button)myView.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
 			@Override

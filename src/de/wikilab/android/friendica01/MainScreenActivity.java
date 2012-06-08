@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+/*package de.wikilab.android.friendica01;
 
 import java.util.ArrayList;
 
@@ -27,12 +27,13 @@ public class MainScreenActivity extends Activity implements LoginListener {
 		MainList.add("Timeline");
 		MainList.add("Notifications");
 		MainList.add("My Wall");
-		MainList.add("My Photo Albums");
+		MainList.add("Update My Status");
 		MainList.add("Friends");
 		MainList.add("Friend Requests");
-		MainList.add("Update My Status");
+		MainList.add("My Photo Albums");
 		MainList.add("Take Photo And Upload");
 		MainList.add("Select Photo And Upload");
+		MainList.add("Preferences");
 		MainList.add("Log Out");
 	}
 	
@@ -114,6 +115,18 @@ public class MainScreenActivity extends Activity implements LoginListener {
 				if (MainList.get(index).equals("Notifications")) {
 					startActivity(new Intent(MainScreenActivity.this, NotificationsActivity.class));
 				}
+
+				if (MainList.get(index).equals("My Wall")) {
+					startActivity(new Intent(MainScreenActivity.this, PostListActivity.class));
+				}
+
+				if (MainList.get(index).equals("Update My Status")) {
+					startActivity(new Intent(MainScreenActivity.this, WritePostActivity.class));
+				}
+				
+				if (MainList.get(index).equals("Preferences")) {
+					startActivity(new Intent(MainScreenActivity.this, PreferencesActivity.class));
+				}
 				
 				if (MainList.get(index).equals("Log Out")) {
 					SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(MainScreenActivity.this).edit();
@@ -131,3 +144,4 @@ public class MainScreenActivity extends Activity implements LoginListener {
 	}
 	
 }
+*/

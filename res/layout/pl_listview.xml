@@ -8,7 +8,7 @@
 					android:layout_height="wrap_content">
 						<include layout="@layout/header_logo" />
 					  
-						<TextView android:text="@string/timeline" android:layout_width="wrap_content" android:layout_height="wrap_content"
+						<TextView android:text="@string/timeline" android:id="@+id/header_text" android:layout_width="wrap_content" android:layout_height="wrap_content"
 			    			  android:textColor="#000" android:layout_toRightOf="@id/header_logo" android:layout_alignBaseline="@id/header_logo"></TextView>
 			    	
 						<!-- <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
@@ -18,7 +18,12 @@
 					</RelativeLayout>
 			    
 			    
-			    <ListView android:id="@+id/listview" android:layout_width="fill_parent" android:layout_height="fill_parent"></ListView>
+			    <fragment
+					    android:name="de.wikilab.android.friendica01.PostListFragment"
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:id="@+id/pl_fragment">
+					</fragment>
     
 
 </LinearLayout>

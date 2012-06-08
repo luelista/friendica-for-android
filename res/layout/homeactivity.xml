@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+                        S M A R T P H O N E   L A Y O U T          FOR HOMEACTIVITY
+ -->
+	<LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:orientation="vertical">
+
+			    <RelativeLayout android:background="@drawable/header_gradient" android:layout_width="fill_parent" android:orientation="horizontal"
+					android:layout_height="wrap_content">
+						<include layout="@layout/header_logo" />
+					  
+						<TextView android:text="@string/hello" android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			    			  android:textColor="#000" android:layout_toRightOf="@id/header_logo" android:layout_alignBaseline="@id/header_logo"></TextView>
+			    	
+					</RelativeLayout>
+					
+			    <LinearLayout android:paddingLeft="10dip" android:paddingTop="5dip" android:paddingBottom="5dip" android:background="@drawable/subheader_gradient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+			    	
+						<ImageView android:layout_height="35dp" android:id="@+id/profile_image" android:layout_width="35dp" android:src="@drawable/ic_menu_archive"></ImageView>
+						
+			    	<TextView android:id="@+id/selected_clipboard" android:text="@string/loading_data" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			    			  android:textColor="#fff" android:paddingLeft="10dp"></TextView>
+			    	
+			    </LinearLayout>
+			    
+			    
+			    
+	
+<fragment
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="de.wikilab.android.friendica01.MainMenuFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/menu_fragment">
+</fragment>
+
+</LinearLayout>

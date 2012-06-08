@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+					*********************************************
+					*******  T A B L E T   L A Y O U T           for HomeActivity
+ -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    
+    <!-- links -->
+		<LinearLayout
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="30"
+				  android:orientation="vertical"
+				  android:id="@+id/left_bar">
+
+					    <LinearLayout android:paddingLeft="10dip" android:paddingTop="5dip" android:paddingBottom="5dip" android:background="@drawable/subheader_gradient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+										<ImageView android:layout_height="37dp" android:id="@+id/profile_image" android:layout_width="37dp" android:src="@drawable/ic_menu_archive"></ImageView>
+							    	<TextView android:id="@+id/selected_clipboard" android:text="@string/loading_data" android:layout_width="wrap_content" android:layout_height="wrap_content"
+							    			  android:textColor="#fff" android:paddingLeft="10dp"></TextView>
+					    </LinearLayout>
+					    
+					    <fragment
+					        android:name="de.wikilab.android.friendica01.MainMenuFragment"
+					        android:id="@+id/menu_fragment"
+								  android:layout_width="match_parent"
+								  android:layout_height="match_parent">
+					    </fragment>
+		</LinearLayout>
+		
+    <!-- rechts -->
+		<LinearLayout android:layout_weight="70"
+									android:layout_width="0dp"
+									android:layout_height="match_parent"
+									android:orientation="vertical"
+									android:id="@+id/right_bar">
+
+			    
+			    <RelativeLayout android:background="@drawable/header_gradient" android:layout_width="fill_parent" android:orientation="horizontal"
+					android:layout_height="wrap_content">
+						<include layout="@layout/header_logo" />
+					  
+						<TextView android:text="@string/hello" android:id="@+id/header_text" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			    			  android:textColor="#000" android:layout_toRightOf="@id/header_logo" android:layout_alignBaseline="@id/header_logo"></TextView>
+			    	
+						<!-- <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_sdcard" android:layout_toLeftOf="@+id/btn_upload_photo" android:layout_width="wrap_content" android:src="@drawable/sdcard"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_photo" android:layout_alignParentRight="true"  android:layout_width="wrap_content" android:src="@drawable/photo"></ImageButton>
+						-->
+					</RelativeLayout>
+			    
+			    <fragment
+			        android:name="de.wikilab.android.friendica01.WelcomeFragment"
+						  android:layout_width="match_parent"
+						  android:layout_height="match_parent"
+			        android:id="@+id/view_fragment">
+			    </fragment>
+		</LinearLayout>
+</LinearLayout>

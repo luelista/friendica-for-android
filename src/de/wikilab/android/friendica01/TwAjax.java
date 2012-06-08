@@ -12,6 +12,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -41,7 +44,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Proxy;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
@@ -195,11 +197,20 @@ public class TwAjax extends Thread {
 	*/
 	
 	public void updateProxySettings(Context ctx) {
-		myProxyIp = Proxy.getHost(ctx);
-		myProxyPort = Proxy.getPort(ctx);
-
+		ProxySelector defaultProxySelector = ProxySelector.getDefault();
+        List<Proxy> proxyList = defaultProxySelector.select(URI.create("http://frnd.tk"));
+        //Log.i("TwAjax", "proxyCount="+proxyList.size()+"|"+((InetSocketAddress)proxyList.get(0).address()).getHostName());
+        if (proxyList.size() == 0 || proxyList.get(0).address() == null) {
+        	return;
+		}
+		myProxyIp = ((InetSocketAddress)proxyList.get(0).address()).getHostName();
+		myProxyPort = ((InetSocketAddress)proxyList.get(0).address()).getPort();
+		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		myProxyUsername = prefs.getString("proxy_username", null);
+		//for(String key:prefs.getAll().keySet()) {
+		//Log.w("PREF:",key+"="+prefs.getAll().get(key).toString());	
+		//}
+		myProxyUsername = prefs.getString("proxy_user", null);
 		myProxyPassword = prefs.getString("proxy_password", null);
 		Log.i("TwAjax", "PROXY SETTINGS:");
 		Log.i("TwAjax", "Host=" + myProxyIp);

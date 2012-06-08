@@ -40,7 +40,7 @@ public class Notification {
 		private static final String TAG = "friendica01.PostListAdapter";
 		
 		public NotificationsListAdapter(Context context, ArrayList<Notification> notifs) {
-			super(context, R.layout.tl_listitem, notifs);
+			super(context, R.layout.pl_listitem, notifs);
 			
 		}
 		
@@ -49,7 +49,7 @@ public class Notification {
 			if (convertView == null) {
 				LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				
-				convertView = inf.inflate(R.layout.tl_listitem, null);
+				convertView = inf.inflate(R.layout.pl_listitem, null);
 			}
 			
 			Notification post = (Notification) getItem(position);

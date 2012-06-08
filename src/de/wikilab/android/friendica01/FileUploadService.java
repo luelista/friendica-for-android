@@ -177,7 +177,7 @@ public class FileUploadService extends IntentService {
 			final TwAjax uploader = new TwAjax(FileUploadService.this, true, true);
 			uploader.addPostFile(new TwAjax.PostFile("media", targetFilename, tempFile));
 			uploader.addPostData("status", descText);
-			uploader.addPostData("source", "andfrnd.wikilab.de");
+			uploader.addPostData("source", "<a href='http://andfrnd.wikilab.de'>Friendica for Android</a>");
 			uploader.uploadFile("http://"+server+"/api/statuses/update", null);
 			Log.i("Andfrnd/UploadFile", "after uploadFile");
 			Log.i("Andfrnd/UploadFile", "isSuccess() = " + uploader.isSuccess() );

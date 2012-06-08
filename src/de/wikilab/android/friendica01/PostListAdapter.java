@@ -20,7 +20,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 	private static final String TAG = "friendica01.PostListAdapter";
 	
 	public PostListAdapter(Context context, JSONObject[] objects) {
-		super(context, R.layout.tl_listitem, objects);
+		super(context, R.layout.pl_listitem, objects);
 		
 	}
 	
@@ -29,7 +29,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 		if (convertView == null) {
 			LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			
-			convertView = inf.inflate(R.layout.tl_listitem, null);
+			convertView = inf.inflate(R.layout.pl_listitem, null);
 		}
 		
 		JSONObject post = (JSONObject) getItem(position);
