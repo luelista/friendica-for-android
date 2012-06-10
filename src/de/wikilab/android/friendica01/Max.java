@@ -54,8 +54,46 @@ public class Max {
 		
 	}
 	
-	
+    public static String Hexdump(byte[] data) {
+    	StringBuffer b = new StringBuffer();
+        char[] parts = new char[17];
+        int partsloc = 0;
+        for (int i = 0; i < data.length; i++) {
+            int d = ((int) data[i]) & 0xff;
+            if (d == 0) {
+                parts[partsloc++] = '.';
+            } else if (d < 32 || d >= 127) {
+                parts[partsloc++] = '?';
+            } else {
+                parts[partsloc++] = (char) d;
+            }
+            if (i % 16 == 0) {
+                int start = Integer.toHexString(data.length).length();
+                int end = Integer.toHexString(i).length();
 
+                for (int j = start; j > end; j--) {
+                    b.append("0");
+                }
+                b.append(Integer.toHexString(i) + ": ");
+            }
+            if (d < 16) {
+            	b.append("0" + Integer.toHexString(d));
+            } else {
+            	b.append(Integer.toHexString(d));
+            }
+            if ((i & 15) == 15 || i == data.length - 1) {
+            	b.append("      " + new String(parts) + "\n");
+                partsloc = 0;
+            } else if ((i & 7) == 7) {
+            	b.append("  ");
+                parts[partsloc++] = ' ';
+            } else if ((i & 1) == 1) {
+            	b.append(" ");
+            }
+        }
+        b.append("\n");
+        return b.toString();
+    }
 	/**
 	 * 
 	 * @param ctx     MUST IMPLEMENT LoginListener !!!

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/top_control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header_gradient"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/header_logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/header_logo"
+                android:layout_toRightOf="@id/header_logo"
+                android:text="@string/post_status_update"
+                android:textColor="#000" >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#66aaffaa"
+                android:orientation="horizontal"
+                android:paddingLeft="1dp" >
+
+                <ImageButton
+                    android:id="@+id/btn_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/header_gradient"
+                    android:padding="5dp"
+                    android:paddingTop="4dp"
+                    android:src="@android:drawable/ic_menu_edit" />
+            </LinearLayout>
+            <!- -
+            <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_sdcard" android:layout_toLeftOf="@+id/btn_upload_photo" android:layout_width="wrap_content" android:src="@drawable/sdcard"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_photo" android:layout_alignParentRight="true"  android:layout_width="wrap_content" android:src="@drawable/photo"></ImageButton>
+            - ->
+        </RelativeLayout>
+        <!- -
+			    <LinearLayout android:paddingLeft="10dip" android:paddingTop="5dip" android:paddingBottom="5dip" android:background="@drawable/subheader_gradient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+			    	
+						<ImageView android:layout_height="35dp" android:id="@+id/profile_image" android:layout_width="35dp" android:src="@drawable/ic_menu_archive"></ImageView>
+						
+			    	<TextView android:id="@+id/selected_clipboard" android:text="@string/loading_data" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			    			  android:textColor="#fff" android:paddingLeft="10dp"></TextView>
+			    	
+			    </LinearLayout>
+        - ->
+
+    </LinearLayout>
+		-->
+		
+		
+    <RelativeLayout
+        android:id="@+id/bottom_control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" 
+            android:layout_alignParentLeft="true">
+
+            <!--
+			<TextView android:text="Name: " android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+			<EditText android:id="@+id/txt_filename" android:layout_width="match_parent" android:layout_height="wrap_content"></EditText>
+            -->
+<!-- 			<ImageView android:layout_height="200dp" android:maxHeight="200dp" android:id="@+id/preview" android:layout_width="wrap_content" android:src="@drawable/ic_menu_archive"></ImageView> -->
+
+            <ToggleButton
+                android:id="@+id/sendLatLon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/viewLatLon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/viewLatLon" />
+            
+        </LinearLayout>
+            <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/btn_upload" android:padding="5dp" android:paddingTop="4dp"
+						 android:drawableLeft="@android:drawable/ic_menu_edit" android:text="@string/mm_updatemystatus"
+            android:layout_alignParentRight="true" android:paddingLeft="40dp" />
+						
+        <!--                          android:background="@drawable/header_gradient" 
+		<RelativeLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/footer_gradient">
+			<!-x- <Button android:layout_width="wrap_content" android:id="@+id/btn_new_dir"
+			android:layout_height="wrap_content" android:text="Neuer Ordner" /> -x->
+			<Button android:layout_width="wrap_content" android:id="@+id/btn_upload" android:paddingLeft="60dp" android:paddingRight="60dp"
+			android:layout_height="wrap_content" android:text="@string/post" android:layout_centerInParent="true" />
+		</RelativeLayout>
+        -->
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/maintb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_control_bar"
+        android:layout_alignParentTop="true"
+        android:gravity="top"
+        android:text="" />
+
+</RelativeLayout>

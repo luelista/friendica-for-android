@@ -19,19 +19,23 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class PostListFragment extends Fragment {
 	ListView list;
+	ProgressBar progbar;
+	View myView;
 	
 	String navigateOrder = null;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		list = (ListView) inflater.inflate(R.layout.pl_listviewinner, container);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		return list;
+		myView = inflater.inflate(R.layout.pl_listviewinner, container, false);
+		list = (ListView) myView.findViewById(R.id.listview);
+		progbar = (ProgressBar) myView.findViewById(R.id.progressbar);
+		return myView;
 	}
 	/*
 	@Override
@@ -59,9 +63,13 @@ public class PostListFragment extends Fragment {
 	}
 	
 	public void navigateList(String target) {
-		if (!isInLayout()) {
+		if (!isAdded()) {
 			navigateOrder = target;
 			return;
+		}
+		if (myView != null) {
+			list.setVisibility(View.GONE);
+			progbar.setVisibility(View.VISIBLE);
 		}
 		if (target != null && target.equals("mywall")) {
 			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_mywall), null);
@@ -73,6 +81,12 @@ public class PostListFragment extends Fragment {
 			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_timeline), null);
 			loadTimeline();
 		}
+	}
+	
+	public void hideProgBar() {
+
+		list.setVisibility(View.VISIBLE);
+		progbar.setVisibility(View.GONE);
 	}
 	
 	public void loadTimeline() {
@@ -97,13 +111,10 @@ public class PostListFragment extends Fragment {
 					list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
 					
 				} catch (Exception e) {
-
-					//ListView lvw = (ListView) findViewById(R.id.listview);
-					
-					list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, android.R.id.text2, new String[]{"Error: ", e.getMessage(), t.getResult()}));
-					
+					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
+				hideProgBar();
 			}
 		});
 		
@@ -131,10 +142,11 @@ public class PostListFragment extends Fragment {
 					
 					list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
 					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
+					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
+				hideProgBar();
 			}
 		});
 		
@@ -166,9 +178,10 @@ public class PostListFragment extends Fragment {
 					list.setAdapter(new Notification.NotificationsListAdapter(getActivity(), notifs));
 					
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
+				hideProgBar();
 			}
 		});
 		

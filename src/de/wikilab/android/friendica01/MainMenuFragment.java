@@ -59,7 +59,7 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 					appendNumber(listWithNotifications, 1, xd.getElementsByTagName("notif").item(0).getAttributes().getNamedItem("count").getNodeValue());
 				} catch (Exception ingoreException) {}
 				
-				lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, listWithNotifications));
+				lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, listWithNotifications));
 				
 			}
 		});
@@ -72,29 +72,25 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		mainView = inflater.inflate(R.layout.mainmenu, container);
 		
 		lvw = (ListView) mainView.findViewById(R.id.listview);
-		lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, MainList));
-		
+		lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, MainList));
 
-		
-			MainList.add(getString(R.string.mm_timeline));
-			MainList.add(getString(R.string.mm_notifications));
-			MainList.add(getString(R.string.mm_mywall));
-			MainList.add(getString(R.string.mm_myphotoalbums));
-			MainList.add(getString(R.string.mm_friends));
-			MainList.add(getString(R.string.mm_friendrequests));
-			MainList.add(getString(R.string.mm_updatemystatus));
-			MainList.add(getString(R.string.mm_takephoto));
-			MainList.add(getString(R.string.mm_selectphoto));
-			MainList.add(getString(R.string.mm_preferences));
-			MainList.add(getString(R.string.mm_logout));
-		
-		
+		MainList.add(getString(R.string.mm_timeline));
+		MainList.add(getString(R.string.mm_notifications));
+		MainList.add(getString(R.string.mm_mywall));
+		MainList.add(getString(R.string.mm_myphotoalbums));
+		MainList.add(getString(R.string.mm_friends));
+		MainList.add(getString(R.string.mm_friendrequests));
+		MainList.add(getString(R.string.mm_updatemystatus));
+		MainList.add(getString(R.string.mm_takephoto));
+		MainList.add(getString(R.string.mm_selectphoto));
+		MainList.add(getString(R.string.mm_preferences));
+		MainList.add(getString(R.string.mm_logout));
+
 		return mainView;
 	}
 
@@ -105,6 +101,7 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 		lvw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override public void onItemClick(AdapterView<?> arg0, View arg1, int index, long arg3) {
 				((FragmentParentListener)getActivity()).OnFragmentMessage("Navigate Main Menu", MainList.get(index), null);
+				((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(index);
 			}
 		});
 	}
