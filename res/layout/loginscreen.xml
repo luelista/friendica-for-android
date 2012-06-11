@@ -13,8 +13,12 @@
     
     <TableLayout android:id="@+id/tableLayout1" android:stretchColumns="1" android:layout_width="match_parent" android:layout_height="wrap_content">
         <TableRow android:id="@+id/tableRow1" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:layout_width="wrap_content" android:text="@string/protocol"></TextView>
+            <Spinner android:text="" android:entries="@array/supported_protocols" android:id="@+id/selProtocol" android:imeOptions="actionNext" android:inputType="textUri" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow1" android:layout_width="match_parent" android:layout_height="wrap_content">
             <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:layout_width="wrap_content" android:text="@string/server"></TextView>
-            <EditText android:text="" android:id="@+id/edtServer" android:singleLine="true" android:imeOptions="actionNext" android:inputType="textUri" android:layout_width="match_parent" android:layout_height="wrap_content"></EditText>
+            <EditText android:text="" android:hint="example.com" android:id="@+id/edtServer" android:singleLine="true" android:imeOptions="actionNext" android:inputType="textUri" android:layout_width="match_parent" android:layout_height="wrap_content"></EditText>
         </TableRow>
         <TableRow android:id="@+id/tableRow2" android:layout_width="match_parent" android:layout_height="wrap_content">
             <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:layout_width="wrap_content" android:text="@string/username"></TextView>
@@ -33,7 +37,7 @@
         </TableRow>
         <TableRow android:id="@+id/tableRow5" android:layout_width="match_parent" android:layout_height="wrap_content">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=""></TextView>
-            <TextView android:layout_width="wrap_content" android:id="@+id/proxy_settings" android:textColor="#0000ff" android:layout_height="wrap_content" android:text="@string/proxy_settings"></TextView>
+            <TextView android:layout_width="wrap_content" android:id="@+id/proxy_settings" android:paddingBottom="10dp" android:textColor="#0000ff" android:layout_height="wrap_content" android:text="@string/proxy_settings"></TextView>
             
         </TableRow>
     </TableLayout>

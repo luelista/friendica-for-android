@@ -9,6 +9,10 @@
 
     <string name="loading_data">Loading&#8230;</string>
     
+    <string name="protocol">Protocol</string>
+    <string-array name="supported_protocols"> <!-- this is NOT dynamic! -->
+        <item>http</item><item>https</item>
+    </string-array>
     <string name="server">Server</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -35,5 +39,6 @@
 		<string name="mm_selectphoto">Select Photo And Upload</string>
 		<string name="mm_preferences">Preferences</string>
 		<string name="mm_logout">Log Out</string>
-    
+		
+    <string name="fake_data_notice">NOTE: As Friendica\&apos;s API doesn\&apos;t support photo albums at the moment, only example photos from my Panoramio profile are shown. <i>(tap to close)</i></string>
 </resources>

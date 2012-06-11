@@ -1,14 +1,15 @@
 package de.wikilab.android.friendica01;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,13 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 public class FriendicaImgUploadActivity extends Activity implements LoginListener {
 
@@ -38,6 +34,29 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 	
 	String textToUpload;
 	boolean uploadTextMode;
+	
+	public static Bitmap loadResizedBitmap( String filename, int width, int height, boolean exact ) {
+	    Bitmap bitmap = null;
+	    BitmapFactory.Options options = new BitmapFactory.Options();
+	    options.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile( filename, options );
+	    if ( options.outHeight > 0 && options.outWidth > 0 ) {
+	        options.inJustDecodeBounds = false;
+	        options.inSampleSize = 2;
+	        while (    options.outWidth  / options.inSampleSize > width
+	                && options.outHeight / options.inSampleSize > height ) {
+	            options.inSampleSize++;
+	        }
+	        options.inSampleSize--;
+
+	        bitmap = BitmapFactory.decodeFile( filename, options );
+	        if ( bitmap != null && exact ) {
+	            bitmap = Bitmap.createScaledBitmap( bitmap, width, height, false );
+	        }
+	    }
+	    return bitmap;
+	}
+
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -82,8 +101,15 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 				fileToUpload = (Uri) callingIntent.getParcelableExtra(Intent.EXTRA_STREAM);
 				String fileSpec = Max.getRealPathFromURI(FriendicaImgUploadActivity.this, fileToUpload);
 				
+				ImageView gallerypic =((ImageView)findViewById(R.id.preview));
+				Drawable toRecycle= gallerypic.getDrawable();
+				if (toRecycle != null) {
+				    ((BitmapDrawable)gallerypic.getDrawable()).getBitmap().recycle();
+				}
+
+				//gallerypic.setImageURI(Uri.parse("file://"+fileSpec));
+				gallerypic.setImageBitmap(loadResizedBitmap(fileSpec, 500, 300, false));
 				
-				((ImageView)findViewById(R.id.preview)).setImageURI(Uri.parse("file://"+fileSpec));
 				//txtFilename.setText(Max.getBaseName(fileSpec));
 				
 				

@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
 import org.json.JSONObject;
 
@@ -27,6 +30,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -40,6 +44,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Max {
@@ -94,7 +99,33 @@ public class Max {
         b.append("\n");
         return b.toString();
     }
-	/**
+	
+    
+
+    public static String readFile(String path) throws IOException {
+    	FileInputStream stream = new FileInputStream(new File(path));
+    	try {
+    		FileChannel fc = stream.getChannel();
+    		MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+    		/* Instead of using default, pass in a decoder. */
+    		return Charset.defaultCharset().decode(bb).toString();
+    	}
+    	finally {
+    		stream.close();
+    	}
+    }
+    
+    public static String getServer(Context ctx) {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		return  prefs.getString("login_protocol", null) + "://" + prefs.getString("login_server", null);
+    }
+    
+
+    public static File getTempFile() {
+		return new File(Max.IMG_CACHE_DIR, "imgUploadTemp_" + System.currentTimeMillis() + ".jpg");
+	}
+    
+    /**
 	 * 
 	 * @param ctx     MUST IMPLEMENT LoginListener !!!
 	 * @param errmes
@@ -103,11 +134,10 @@ public class Max {
 		final ProgressDialog pd = new ProgressDialog(ctx);
 		pd.show();		
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		String server = prefs.getString("login_server", null);
+		String server = Max.getServer(ctx);
 		
 		final TwAjax t = new TwAjax(ctx, true, true);
-		t.getUrlContent("http://"+server+"/api/account/verify_credentials", new Runnable() {
+		t.getUrlContent(server+"/api/account/verify_credentials", new Runnable() {
 			@Override
 			public void run() {
 				pd.dismiss();
@@ -117,19 +147,21 @@ public class Max {
 							JSONObject r = (JSONObject) t.getJsonResult();
 							String name = r.getString("name");
 							((TextView)ctx.findViewById(R.id.selected_clipboard)).setText(name);
-
 							((LoginListener) ctx).OnLogin();
 							
 							
 							final TwAjax profileImgDl = new TwAjax();
 							final String targetFs = IMG_CACHE_DIR+"/my_profile_pic_"+r.getString("id")+".jpg";
-							profileImgDl.urlDownloadToFile(r.getString("profile_image_url"), targetFs, new Runnable() {
-								@Override
-								public void run() {
-									((ImageView)ctx.findViewById(R.id.profile_image)).setImageURI(Uri.parse("file://"+targetFs));
-								}
-							});
-							
+							if (new File(targetFs).isFile()) {
+								((ImageView)ctx.findViewById(R.id.profile_image)).setImageURI(Uri.parse("file://"+targetFs));
+							} else {
+								profileImgDl.urlDownloadToFile(r.getString("profile_image_url"), targetFs, new Runnable() {
+									@Override
+									public void run() {
+										((ImageView)ctx.findViewById(R.id.profile_image)).setImageURI(Uri.parse("file://"+targetFs));
+									}
+								});
+							}
 							
 						} else {
 							showLoginForm(ctx, "Error:"+t.getResult());
@@ -166,12 +198,16 @@ public class Max {
 		.show();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String protocol = prefs.getString("login_protocol", null);
 		String server = prefs.getString("login_server", null);
 		String userName = prefs.getString("login_user", null);
 		
 		if (errmes != null) {
 			((TextView)myView.findViewById(R.id.lblInfo)).setText(errmes);
 		}
+		
+		final Spinner selProtocol = (Spinner)myView.findViewById(R.id.selProtocol);
+		selProtocol.setSelection(selProtocol.equals("https") ? 1 : 0);            //HACK !!!
 		
 		final EditText edtServer = (EditText)myView.findViewById(R.id.edtServer);
 		edtServer.setText(server);
@@ -192,6 +228,7 @@ public class Max {
 			@Override
 			public void onClick(View v) {
 				SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
+				prefs.putString("login_protocol", selProtocol.getSelectedItem().toString());
 				prefs.putString("login_server", edtServer.getText().toString());
 				prefs.putString("login_user", edtUser.getText().toString());
 				prefs.putString("login_password", edtPassword.getText().toString());

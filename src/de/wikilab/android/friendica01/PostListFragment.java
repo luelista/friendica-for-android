@@ -22,51 +22,21 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class PostListFragment extends Fragment {
+public class PostListFragment extends ContentFragment {
 	ListView list;
 	ProgressBar progbar;
-	View myView;
 	
-	String navigateOrder = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
 		myView = inflater.inflate(R.layout.pl_listviewinner, container, false);
 		list = (ListView) myView.findViewById(R.id.listview);
 		progbar = (ProgressBar) myView.findViewById(R.id.progressbar);
+		
 		return myView;
 	}
-	/*
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.tl_listview);
-		
-		TextView header_logo = (TextView) findViewById(R.id.header_logo);
-		header_logo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		
-		loadTimeline();
-	}
-*/
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (navigateOrder != null) navigateList(navigateOrder); navigateOrder = null;
-	}
-	
-	public void navigateList(String target) {
-		if (!isAdded()) {
-			navigateOrder = target;
-			return;
-		}
+
+	protected void onNavigate(String target) {
 		if (myView != null) {
 			list.setVisibility(View.GONE);
 			progbar.setVisibility(View.VISIBLE);
@@ -90,12 +60,8 @@ public class PostListFragment extends Fragment {
 	}
 	
 	public void loadTimeline() {
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String server = prefs.getString("login_server", null);
-		
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlContent("http://" + server + "/api/statuses/home_timeline.json", new Runnable() {
+		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/home_timeline.json", new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -122,12 +88,8 @@ public class PostListFragment extends Fragment {
 	
 
 	public void loadWall() {
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String server = prefs.getString("login_server", null);
-		
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlContent("http://" + server + "/api/statuses/user_timeline.json", new Runnable() {
+		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/user_timeline.json", new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -155,11 +117,8 @@ public class PostListFragment extends Fragment {
 	
 
 	void loadNotifications() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String server = prefs.getString("login_server", null);
-		
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlXmlDocument("http://" + server + "/ping", new Runnable() {
+		t.getUrlXmlDocument(Max.getServer(getActivity()) + "/ping", new Runnable() {
 			@Override
 			public void run() {
 				try {

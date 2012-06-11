@@ -31,13 +31,10 @@ public class PreferencesActivity  extends PreferenceActivity implements OnShared
           initSummary(getPreferenceScreen().getPreference(i));
         }
         
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String server = prefs.getString("login_server", null);
-        
         Preference p2 = findPreference("proxy_info");
         
         ProxySelector defaultProxySelector = ProxySelector.getDefault();
-        List<Proxy> proxyList = defaultProxySelector.select(URI.create("http://" + server));
+        List<Proxy> proxyList = defaultProxySelector.select(URI.create(Max.getServer(this)));
         
         //String ProxyIp = Proxy.getHost(PreferencesActivity.this);
 		//int ProxyPort = Proxy.getPort(PreferencesActivity.this);

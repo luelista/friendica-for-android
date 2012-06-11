@@ -167,18 +167,12 @@ public class FileUploadService extends IntentService {
 		Max.resizeImage(fileSpec, tempFile, 1024,768);
 		
 		try {
-			
-
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String server = prefs.getString("login_server", null);
-			
-			
 			Log.i("Andfrnd/UploadFile", "before uploadFile");
 			final TwAjax uploader = new TwAjax(FileUploadService.this, true, true);
 			uploader.addPostFile(new TwAjax.PostFile("media", targetFilename, tempFile));
 			uploader.addPostData("status", descText);
 			uploader.addPostData("source", "<a href='http://andfrnd.wikilab.de'>Friendica for Android</a>");
-			uploader.uploadFile("http://"+server+"/api/statuses/update", null);
+			uploader.uploadFile(Max.getServer(this)+"/api/statuses/update", null);
 			Log.i("Andfrnd/UploadFile", "after uploadFile");
 			Log.i("Andfrnd/UploadFile", "isSuccess() = " + uploader.isSuccess() );
 			Log.i("Andfrnd/UploadFile", "getError() = " + uploader.getError() );

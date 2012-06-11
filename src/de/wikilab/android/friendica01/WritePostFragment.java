@@ -128,9 +128,6 @@ public class WritePostFragment extends Fragment {
 		
 		final ProgressDialog pd = ProgressDialog.show(getActivity(), "Posting status...", "Please wait", true, false);
 		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String server = prefs.getString("login_server", null);
-		
 		final TwAjax t = new TwAjax(getActivity(), true, true);
 		t.addPostData("status", txt_status.getText().toString());
 		t.addPostData("source", "<a href='http://andfrnd.wikilab.de'>Friendica for Android</a>");
@@ -148,7 +145,7 @@ public class WritePostFragment extends Fragment {
 			t.addPostData("lat", String.valueOf(latitude));
 			t.addPostData("long", String.valueOf(longitude));
 		}
-		t.postData("http://" + server + "/api/statuses/update.json", new Runnable() {
+		t.postData(Max.getServer(getActivity()) + "/api/statuses/update.json", new Runnable() {
 			@Override
 			public void run() {
 				pd.dismiss();

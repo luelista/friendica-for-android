@@ -1,22 +1,33 @@
 package de.wikilab.android.friendica01;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 public class HomeActivity extends FragmentActivity implements FragmentParentListener, LoginListener {
 
+	public static final int RQ_SELECT_PHOTO = 44;
+	public static final int RQ_TAKE_PHOTO = 55;
+	
+	public File takePhotoTarget;
+	
 	WelcomeFragment frag_welcome = new WelcomeFragment();
 	PostListFragment frag_posts = new PostListFragment();
 	WritePostFragment frag_writepost = new WritePostFragment();
 	PhotoGalleryFragment frag_photos = new PhotoGalleryFragment();
-	
+	FriendListFragment frag_friendlist = new FriendListFragment();
+	//PreferenceFragment frag_preferences = new PreferenceFragment();
 	
 	String currentMMItem = null;
 	
@@ -55,6 +66,9 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 			}
 			
 		}
+		
+		ViewServer.get(this).addWindow(this);
+		
 	}
 
 	@Override
@@ -88,6 +102,31 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		}
 	}
 	
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch(requestCode) {
+    	case RQ_SELECT_PHOTO:
+    		if (resultCode == RESULT_OK) {
+    			Intent in = new Intent(HomeActivity.this, FriendicaImgUploadActivity.class);
+    			in.putExtra(Intent.EXTRA_STREAM, data.getData());
+    			startActivity(in);
+    		}
+    		break;
+    	case RQ_TAKE_PHOTO:
+    		if (resultCode == RESULT_OK) {
+    			//Log.e("INTENT=",data==null?"NULL":"not null");
+    			Intent in = new Intent(HomeActivity.this, FriendicaImgUploadActivity.class);
+    			in.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(takePhotoTarget));
+    			//in.putExtra(Intent.EXTRA_STREAM, data.getData());
+    			startActivity(in);
+    		}
+    		break;
+    	default:
+    		super.onActivityResult(requestCode, resultCode, data);
+    	}
+    }
+	
 	void navigate(String arg1) {
 		currentMMItem = arg1;
 		
@@ -102,17 +141,33 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		if (arg1.equals("My Wall")) {
 			navigatePostList("mywall");
 		}
-		
+
 		if (arg1.equals("Update My Status")) {
 			navigateStatusUpdate();
+		}
+
+		if (arg1.equals("Friends")) {
+			navigateFriendList();
 		}
 
 		if (arg1.equals("My Photo Albums")) {
 			navigatePhotoGallery("myalbums");
 		}
+
+		if (arg1.equals("Take Photo And Upload")) {
+			Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			takePhotoTarget = Max.getTempFile();
+			in.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(takePhotoTarget));
+			startActivityForResult(in, RQ_TAKE_PHOTO);
+		}
+		if (arg1.equals("Select Photo And Upload")) {
+			Intent in = new Intent(Intent.ACTION_PICK);
+			in.setType("image/*");
+			startActivityForResult(in, RQ_SELECT_PHOTO);
+		}
 		
 		if (arg1.equals("Preferences")) {
-			startActivity(new Intent(HomeActivity.this, PreferencesActivity.class));
+			navigatePreferences();
 		}
 		
 		if (arg1.equals("Log Out")) {
@@ -133,9 +188,25 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		if (subheading != null) subheading.setText(ht);
 	}
 
+	private void navigateFriendList() {
+	    if (! isMultiCol()) {
+	        Intent showContent = new Intent(getApplicationContext(), GenericContentActivity.class);
+	        showContent.putExtra("target", "friendlist");
+	        startActivity(showContent);
+	    } else {
+	    	Fragment viewerFragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.view_fragment_container);
+	    	if (viewerFragment != frag_friendlist) {
+	    		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+	    		t.replace(R.id.view_fragment_container, frag_friendlist);
+	    		t.commit();
+	    	}
+	    	frag_friendlist.navigate("friendlist");
+	    }
+	}
+
 	private void navigatePostList(String listTarget) {
 	    if (! isMultiCol()) {
-	        Intent showContent = new Intent(getApplicationContext(), PostListActivity.class);
+	        Intent showContent = new Intent(getApplicationContext(), GenericContentActivity.class);
 	        showContent.putExtra("target", listTarget);
 	        startActivity(showContent);
 	    } else {
@@ -145,13 +216,13 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    		t.replace(R.id.view_fragment_container, frag_posts);
 	    		t.commit();
 	    	}
-    		frag_posts.navigateList(listTarget);
+    		frag_posts.navigate(listTarget);
 	    }
 	}
 
 	private void navigatePhotoGallery(String galleryTarget) {
 	    if (! isMultiCol()) {
-	        Intent showContent = new Intent(getApplicationContext(), PhotoGalleryActivity.class);
+	        Intent showContent = new Intent(getApplicationContext(), GenericContentActivity.class);
 	        showContent.putExtra("target", galleryTarget);
 	        startActivity(showContent);
 	    } else {
@@ -161,7 +232,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    		t.replace(R.id.view_fragment_container, frag_photos);
 	    		t.commit();
 	    	}
-    		frag_photos.navigateList(galleryTarget);
+    		frag_photos.navigate(galleryTarget);
 	    }
 	}
 	
@@ -180,6 +251,23 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    	}
     		//frag_posts.navigateList(listTarget);
 	    }
+	}
+	
+
+	private void navigatePreferences() {
+	    /*if (! isMultiCol()) {*/
+	        Intent showContent = new Intent(getApplicationContext(), PreferencesActivity.class);
+	        //showContent.putExtra("target", listTarget);
+	        startActivity(showContent);
+	    /*} else {
+	    	Fragment viewerFragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.view_fragment_container);
+	    	if (viewerFragment != frag_preferences) {
+	    		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+	    		t.replace(R.id.view_fragment_container, frag_preferences);
+	    		t.commit();
+	    	}
+    		frag_preferences.navigate("");
+	    }*/
 	}
 	
 	

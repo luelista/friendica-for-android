@@ -23,6 +23,8 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 	
 	ListView lvw;
 
+	private int selectedItemIndex=-1;
+	
 	public final ArrayList<String> MainList = new ArrayList<String>();
 	
 	
@@ -31,11 +33,9 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 	}
 	
 	public void UpdateList() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String server = prefs.getString("login_server", null);
 		
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlXmlDocument("http://" + server + "/ping", new Runnable() {
+		t.getUrlXmlDocument(Max.getServer(getActivity()) + "/ping", new Runnable() {
 		//t.getUrlContent("http://" + server + "/ping", new Runnable() {
 			@Override
 			public void run() {
@@ -60,7 +60,7 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 				} catch (Exception ingoreException) {}
 				
 				lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, listWithNotifications));
-				
+				if (selectedItemIndex>-1)((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(selectedItemIndex);
 			}
 		});
 		//lvw.setAdapter(new HtmlStringArrayAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, MainList));
@@ -69,8 +69,19 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey("selectedItemIndex")) {
+				selectedItemIndex=savedInstanceState.getInt("selectedItemIndex");
+			}
+		}
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt("selectedItemIndex", selectedItemIndex);
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
@@ -78,7 +89,8 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 		
 		lvw = (ListView) mainView.findViewById(R.id.listview);
 		lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, MainList));
-
+		if (selectedItemIndex>-1)((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(selectedItemIndex);
+		
 		MainList.add(getString(R.string.mm_timeline));
 		MainList.add(getString(R.string.mm_notifications));
 		MainList.add(getString(R.string.mm_mywall));
@@ -94,6 +106,8 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 		return mainView;
 	}
 
+
+	
 	@Override
 	public void OnLogin() {
 		UpdateList();
@@ -102,6 +116,7 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 			@Override public void onItemClick(AdapterView<?> arg0, View arg1, int index, long arg3) {
 				((FragmentParentListener)getActivity()).OnFragmentMessage("Navigate Main Menu", MainList.get(index), null);
 				((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(index);
+				selectedItemIndex=index;
 			}
 		});
 	}

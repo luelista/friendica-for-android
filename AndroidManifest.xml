@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.wikilab.android.friendica01"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="2.0" >
+    
+    <!-- 
+    1.0a
+    - Upload Photo From Intent
+    1.0b
+    - Timeline, Notifications, My Wall
+    1.0c
+    - Tablet layout
+    - Menu with count of TL, Notif., Wall, Fr.Rq.
+    - My Photo Albums (dummy)
+    1.0d
+    - Friends
+    2.0
+    - https support
+    - Take Photo And Upload
+     -->
     
 		<!-- PERMISSIONS -->
 		<uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -46,7 +62,13 @@
         </activity>
         
         <activity
-            android:name=".PostListActivity"
+            android:name=".GenericContentActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        
+        <activity
+            android:name=".PhotoGalleryActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
