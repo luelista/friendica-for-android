@@ -1,10 +1,12 @@
 package de.wikilab.android.friendica01;
 
-import org.json.JSONArray;
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +18,28 @@ public class PostDetailFragment extends ContentFragment {
 	private static final String TAG="Friendica/PostDetailFragment";
 	
 
+	PullToRefreshListView reflvw;
 	ListView list;
-	ProgressBar progbar;
+
+	String refreshTarget;
+	
 
 	int conversationId;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		myView = inflater.inflate(R.layout.pl_listviewinner, container, false);
-		list = (ListView) myView.findViewById(R.id.listview);
-		progbar = (ProgressBar) myView.findViewById(R.id.progressbar);
-
+		reflvw = (PullToRefreshListView) myView.findViewById(R.id.listview);
+		list = reflvw.getRefreshableView();
+		
 		return myView;
 	}
 
 	protected void onNavigate(String target) {
 		if (myView != null) {
-			list.setVisibility(View.GONE);
-			progbar.setVisibility(View.VISIBLE);
+			
 		}
+		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
 		if (target != null && target.startsWith("conversation:")) {
 			conversationId = Integer.parseInt(target.substring(13));
 			
@@ -45,27 +50,23 @@ public class PostDetailFragment extends ContentFragment {
 
 	public void hideProgBar() {
 
-		list.setVisibility(View.VISIBLE);
-		progbar.setVisibility(View.GONE);
+		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
 	}
 
 	public void loadConversation() {
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/home_timeline.json", new Runnable() {
+		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/show/" + conversationId, new Runnable() {
 			@Override
 			public void run() {
 				try {
-					JSONArray j = (JSONArray) t.getJsonResult();
-					JSONObject[] jsonObjectArray = new JSONObject[j.length()];
-
-					for(int i = 0; i < j.length(); i++) {
-						jsonObjectArray[i] = j.getJSONObject(i);
-					}
-
+					ArrayList<JSONObject> jsonObjectArray = new ArrayList<JSONObject>();
+					
+					jsonObjectArray.add((JSONObject)t.getJsonResult());
+					
 					//ListView lvw = (ListView) findViewById(R.id.listview);
 
 					list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
-
+					
 				} catch (Exception e) {
 					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();

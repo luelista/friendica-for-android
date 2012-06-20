@@ -15,26 +15,51 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -85,7 +110,40 @@ public class TwAjax extends Thread {
 	private String myProxyIp, myProxyUsername, myProxyPassword;
 	private int myProxyPort;
 	private static final BasicCookieStore cookieStoreManager = new BasicCookieStore();
+	public boolean ignoreSSLCerts = false;
 	
+	public class IgnoreCertsSSLSocketFactory extends SSLSocketFactory {
+	    SSLContext sslContext = SSLContext.getInstance("TLS");
+
+	    public IgnoreCertsSSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+	        super(truststore);
+
+	        TrustManager tm = new X509TrustManager() {
+	            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+	            }
+
+	            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+	            }
+
+	            public X509Certificate[] getAcceptedIssuers() {
+	                return null;
+	            }
+	        };
+
+	        sslContext.init(null, new TrustManager[] { tm }, null);
+	    }
+
+	    @Override
+	    public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+	        return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+	    }
+
+	    @Override
+	    public Socket createSocket() throws IOException {
+	        return sslContext.getSocketFactory().createSocket();
+	    }
+	}
+
 	
 	public static class PostFile {
 		public static final int MAX_BUFFER_SIZE = 1*1024*1024;
@@ -319,11 +377,40 @@ public class TwAjax extends Thread {
 
     }  
 	
+    public DefaultHttpClient getNewHttpClient() {
+        if (ignoreSSLCerts) {
+    	try {
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            trustStore.load(null, null);
+
+            SSLSocketFactory sf = new IgnoreCertsSSLSocketFactory(trustStore);
+            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+            HttpParams params = new BasicHttpParams();
+            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+            SchemeRegistry registry = new SchemeRegistry();
+            registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+            registry.register(new Scheme("https", sf, 443));
+
+            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+            return new DefaultHttpClient(ccm, params);
+        } catch (Exception e) {
+            return new DefaultHttpClient();
+        }
+        } else {
+            return new DefaultHttpClient();
+        }
+    }
+
+    
 	private void runDefault() throws IOException {
 		Log.v("TwAjax", "runDefault URL="+myUrl);
 		
 		// Create a new HttpClient and Get/Post Header
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+		DefaultHttpClient httpclient = getNewHttpClient();
         setHttpClientProxy(httpclient);
         httpclient.getParams().setParameter("http.protocol.content-charset", "UTF-8");
         HttpRequestBase m;
@@ -397,7 +484,7 @@ public class TwAjax extends Thread {
 		Log.i("Andfrnd/TwAjax", "URL="+getURL());
 		URL url = new URL(getURL());
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
+		
 		// Allow Inputs & Outputs
 		connection.setDoInput(true);
 		connection.setDoOutput(true);

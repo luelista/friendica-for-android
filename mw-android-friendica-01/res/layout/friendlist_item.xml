@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="175px"
-    android:layout_height="175px">
+    android:layout_height="175px" android:duplicateParentState="true"
+    >
 
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="175px"
         android:layout_height="175px"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop" android:duplicateParentState="true"
+        />
     <TextView
         android:id="@+id/caption"
         android:layout_width="175px"
@@ -20,7 +22,8 @@
         android:padding="4dp"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textColor="#ffffff" >
+        android:textColor="#ffffff" android:duplicateParentState="true"
+        >
     </TextView>
 
 </RelativeLayout>

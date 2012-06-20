@@ -33,6 +33,7 @@ public class FriendListFragment extends ContentFragment implements FragmentParen
 		list = (GridView) myView.findViewById(R.id.gridview);
 		progbar = (ProgressBar) myView.findViewById(R.id.progressbar);
 		
+		
 		((TextView) myView.findViewById(R.id.notice_bar)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

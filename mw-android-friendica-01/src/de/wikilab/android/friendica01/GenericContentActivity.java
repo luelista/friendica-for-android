@@ -1,11 +1,13 @@
 package de.wikilab.android.friendica01;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,14 @@ public class GenericContentActivity extends FragmentActivity implements Fragment
 		if (message.equals("Set Header Text")) {
 			setHeadertext((String) arg1);
 		}
+		if (message.equals("Loading Animation")) {
+			((ProgressBar) findViewById(R.id.glob_progressbar)).setVisibility(((Integer)arg1).intValue());
+		}
+		if (message.equals("Navigate Conversation")) {
+			Intent in = new Intent(this, GenericContentActivity.class);
+			in.putExtra("target", "conversation:" + arg1);
+			startActivity(in);
+		}
 	}
 	void setHeadertext(String ht) {
 		TextView txtht = (TextView) findViewById(R.id.header_text);
@@ -72,6 +82,11 @@ public class GenericContentActivity extends FragmentActivity implements Fragment
 				t.add(R.id.content_fragment, new FriendListFragment());
 				t.commit();
 			}
+			if (target.startsWith("conversation:")) {
+				FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+				t.add(R.id.content_fragment, new PostDetailFragment());
+				t.commit();
+			}
 		}
 
 	}
@@ -82,7 +97,7 @@ public class GenericContentActivity extends FragmentActivity implements Fragment
 		if (getIntent() != null && getIntent().getStringExtra("target") != null) {
 			target = getIntent().getStringExtra("target");
 		}
-
+		
 		frag.navigate(target);
 	}
 

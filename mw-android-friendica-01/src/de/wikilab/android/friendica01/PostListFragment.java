@@ -1,6 +1,7 @@
 package de.wikilab.android.friendica01;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,13 +10,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.WrapperListAdapter;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -26,13 +32,14 @@ public class PostListFragment extends ContentFragment {
 	
 	PullToRefreshListView reflvw;
 	ListView list;
-	ProgressBar progbar;
 	
 	String refreshTarget;
 	
 	final int ITEMS_PER_PAGE = 20;
-	int curLoadPage = 0;
+	int curLoadPage = 1;
 	boolean loadFinished = false;
+	
+	HashSet<Long> containedIds = new HashSet<Long>();
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,13 +47,12 @@ public class PostListFragment extends ContentFragment {
 		reflvw = (PullToRefreshListView) myView.findViewById(R.id.listview);
 		list = reflvw.getRefreshableView();
 		
-		progbar = (ProgressBar) myView.findViewById(R.id.progressbar);
 		
 		reflvw.setOnRefreshListener(new OnRefreshListener() {
 		    @Override
 		    public void onRefresh() {
 		    	if (loadFinished) {
-			    	curLoadPage = 0;
+			    	curLoadPage = 1;
 			        onNavigate(refreshTarget);
 		    	}
 		    }
@@ -55,8 +61,8 @@ public class PostListFragment extends ContentFragment {
 		reflvw.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 			@Override
 			public void onLastItemVisible() {
-				if (loadFinished && list.getAdapter() instanceof PostListAdapter) {
-					Toast.makeText(getActivity(), "OnLastItemVisibleListener -- loading", Toast.LENGTH_SHORT).show();
+				if (loadFinished && getPostListAdapter() != null) {
+					Toast.makeText(getActivity(), "Loading more items...", Toast.LENGTH_SHORT).show();
 					curLoadPage ++;
 					onNavigate(refreshTarget);
 				} else {
@@ -65,7 +71,23 @@ public class PostListFragment extends ContentFragment {
 			}
 		});
 		
+		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> self, View view, int position, long id) {
+				((FragmentParentListener)getActivity()).OnFragmentMessage("Navigate Conversation", String.valueOf(id), null);
+				
+			}
+		});
+		
 		return myView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (refreshTarget != null && loadFinished) {
+			navigate(refreshTarget);
+		}
 	}
 	
 	protected void onNavigate(String target) {
@@ -73,9 +95,11 @@ public class PostListFragment extends ContentFragment {
 			list.setVisibility(View.GONE);
 			progbar.setVisibility(View.VISIBLE);
 		}*/
-		reflvw.setRefreshing();
+		if (curLoadPage == 1) reflvw.setRefreshing();
 		refreshTarget = target;
 		loadFinished = false;
+		
+		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
 		if (target != null && target.equals("mywall")) {
 			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_mywall), null);
 			loadWall(null);
@@ -95,24 +119,39 @@ public class PostListFragment extends ContentFragment {
 		/*reflvw.setAddStatesFromChildren(addsStates)
 		list.setVisibility(View.VISIBLE);
 		progbar.setVisibility(View.GONE);*/
-		reflvw.onRefreshComplete();
+		if (curLoadPage == 1) reflvw.onRefreshComplete();
+
+		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
 		
 	}
 	
+	private PostListAdapter getPostListAdapter() {
+		Adapter a = list.getAdapter();
+		if (a instanceof WrapperListAdapter) a = ((WrapperListAdapter)a).getWrappedAdapter();
+		if (a instanceof PostListAdapter) return (PostListAdapter)a;
+		return null;
+	}
+	
 	private void setItems(JSONArray j) throws JSONException {
-		if (curLoadPage == 0) {
-			JSONObject[] jsonObjectArray;
-			jsonObjectArray = new JSONObject[j.length()];
+		if (curLoadPage == 1) {
+			ArrayList<JSONObject> jsonObjectArray = new ArrayList<JSONObject>(j.length());
+			containedIds.clear();
 			for(int i = 0; i < j.length(); i++) {
-				jsonObjectArray[i] = j.getJSONObject(i);
+				JSONObject jj = j.getJSONObject(i);
+				jsonObjectArray.add(jj);
+				containedIds.add(jj.getLong("id"));
 			}
 			list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
 		} else {
-			PostListAdapter oldContent = (PostListAdapter)list.getAdapter();
+			PostListAdapter oldContent = getPostListAdapter();
 			for(int i = 0; i < j.length(); i++) {
-				oldContent.add(j.getJSONObject(i));
+				JSONObject jj = j.getJSONObject(i);
+				if (containedIds.contains(jj.getLong("id"))) continue;
+				oldContent.add(jj);
+				containedIds.add(jj.getLong("id"));
 			}
 			oldContent.notifyDataSetChanged();
+			Toast.makeText(getActivity(), "Done loading more items - scroll down :)", Toast.LENGTH_SHORT).show();
 		}
 		loadFinished = true;
 	}

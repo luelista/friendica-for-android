@@ -22,6 +22,12 @@
             android:textColor="#000" >
         </TextView>
 
+        
+        
+            <ProgressBar android:id="@+id/glob_progressbar" android:layout_width="40dp" android:layout_height="40dp" android:layout_alignParentRight="true"
+                android:indeterminate="true" android:layout_centerVertical="true" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:visibility="invisible" />
+            
         <!--
             <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
 						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_sdcard" android:layout_toLeftOf="@+id/btn_upload_photo" android:layout_width="wrap_content" android:src="@drawable/sdcard"></ImageButton>

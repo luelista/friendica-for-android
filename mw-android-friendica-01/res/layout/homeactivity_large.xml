@@ -78,8 +78,12 @@
                 android:textColor="#000" >
             </TextView>
 						
-            <EditText android:id="@+id/search_box" android:layout_width="100dp" android:layout_height="wrap_content"
-                android:hint="Search..." android:layout_alignParentRight="true" />
+            <EditText android:id="@+id/search_box" android:layout_width="180dp" android:layout_height="wrap_content"
+                android:hint="Search..." android:layout_toLeftOf="@+id/glob_progressbar"  />
+            
+            <ProgressBar android:id="@+id/glob_progressbar" android:layout_width="40dp" android:layout_height="40dp" android:layout_alignParentRight="true"
+                android:indeterminate="true" android:layout_centerVertical="true" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:visibility="invisible" />
             
             <!--
             <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>

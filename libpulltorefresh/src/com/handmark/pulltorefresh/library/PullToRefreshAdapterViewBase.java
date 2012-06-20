@@ -65,6 +65,11 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 
 	abstract public ContextMenuInfo getContextMenuInfo();
 
+	
+	
+	
+	
+	
 	/**
 	 * Gets whether an indicator graphic should be displayed when the View is in
 	 * a state where a Pull-to-Refresh can happen. An example of this state is
@@ -272,6 +277,9 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	@Override
 	protected void resetHeader() {
 		super.resetHeader();
+		
+		//reset list visible to allow "load more" again after refresh ~mw 2012-06-20
+		mSavedLastVisibleIndex = -1;
 
 		if (getShowIndicatorInternal()) {
 			updateIndicatorViewsVisibility();

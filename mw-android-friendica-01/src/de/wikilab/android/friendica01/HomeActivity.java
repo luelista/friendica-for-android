@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class HomeActivity extends FragmentActivity implements FragmentParentListener, LoginListener {
@@ -101,6 +102,12 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		
 		if (message.equals("Navigate Main Menu")) {
 			navigate((String) arg1);
+		}
+		if (message.equals("Loading Animation")) {
+			((ProgressBar) findViewById(R.id.glob_progressbar)).setVisibility(((Integer)arg1).intValue());
+		}
+		if (message.equals("Navigate Conversation")) {
+			navigateConversation((String) arg1);
 		}
 	}
 	
@@ -219,6 +226,24 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    		t.commit();
 	    	}
     		frag_posts.navigate(listTarget);
+	    }
+	}
+
+	private void navigateConversation(String conversationId) {
+	    if (! isMultiCol()) {
+	        Intent showContent = new Intent(getApplicationContext(), GenericContentActivity.class);
+	        showContent.putExtra("target", "conversation:" + conversationId);
+	        startActivity(showContent);
+	    } else {
+	    	Fragment viewerFragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.view_fragment_container);
+	    	if (viewerFragment != frag_postdetail) {
+	    		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+	    		t.addToBackStack("");
+	    		t.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+	    		t.replace(R.id.view_fragment_container, frag_postdetail);
+	    		t.commit();
+	    	}
+	    	frag_postdetail.navigate("conversation:" + conversationId);
 	    }
 	}
 
