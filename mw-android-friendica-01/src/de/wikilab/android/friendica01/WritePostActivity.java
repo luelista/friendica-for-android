@@ -1,26 +1,15 @@
 package de.wikilab.android.friendica01;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class WritePostActivity extends FragmentActivity implements FragmentParentListener {
+	private static final String TAG="Friendica/WritePostActivity";
+	
 	TextView header_text;
 	WritePostFragment frag;
 	
@@ -42,6 +31,10 @@ public class WritePostActivity extends FragmentActivity implements FragmentParen
 		header_text.setText(getString(R.string.mm_updatemystatus));
 		
 		frag = (WritePostFragment) getSupportFragmentManager ().findFragmentById(R.id.pl_fragment);
+		
+		if (getIntent() != null && getIntent().getAction() == Intent.ACTION_SEND) {
+			frag.handleSendIntent(getIntent());
+		}
 		
 	}
 	

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 public abstract class ContentFragment extends Fragment {
+	private static final String TAG="Friendica/ContentFragment";
 	
 	View myView;
 	

@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserProfileActivity extends FragmentActivity implements FragmentParentListener {
+	private static final String TAG="Friendica/UserProfileActivity";
+	
 	String userId;
 	
 	@Override

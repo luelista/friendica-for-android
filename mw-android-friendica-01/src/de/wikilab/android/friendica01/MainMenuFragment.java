@@ -16,8 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainMenuFragment extends Fragment implements LoginListener {
-
-	private static final String TAG = "friendica01.MainMenuFragment"; 
+	private static final String TAG="Friendica/MainMenuFragment";
+	
 	
 	View mainView;
 	

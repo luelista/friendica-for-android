@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.TextView;
 
 public class HomeActivity extends FragmentActivity implements FragmentParentListener, LoginListener {
+	private static final String TAG="Friendica/HomeActivity";
+	
 
 	public static final int RQ_SELECT_PHOTO = 44;
 	public static final int RQ_TAKE_PHOTO = 55;
@@ -26,6 +28,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	WritePostFragment frag_writepost = new WritePostFragment();
 	PhotoGalleryFragment frag_photos = new PhotoGalleryFragment();
 	FriendListFragment frag_friendlist = new FriendListFragment();
+	PostDetailFragment frag_postdetail = new PostDetailFragment();
 	//PreferenceFragment frag_preferences = new PreferenceFragment();
 	
 	String currentMMItem = null;
@@ -269,6 +272,15 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    }*/
 	}
 	
+	public void navigatePostDetailId(String postId) {
+		Fragment viewerFragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.view_fragment_container);
+    	if (viewerFragment != frag_postdetail) {
+    		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+    		t.replace(R.id.view_fragment_container, frag_postdetail);
+    		t.commit();
+    	}
+    	frag_postdetail.navigate("post:" + postId);
+	}
 	
 	@Override
 	public void OnLogin() {

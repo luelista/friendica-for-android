@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 public class FriendicaImgUploadActivity extends Activity implements LoginListener {
+	private static final String TAG="Friendica/FriendicaImgUploadActivity";
 
 	public final static int RQ_SELECT_CLIPBOARD = 1;
 	

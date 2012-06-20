@@ -13,7 +13,9 @@ import java.nio.charset.Charset;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,12 +48,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Max {
+	private static final String TAG="Friendica/Max";
+	
 
 
 	public static final String DATA_DIR = "/sdcard/Android/data/de.wikilab.android.friendica01";
 	public static final String IMG_CACHE_DIR = DATA_DIR + "/cache/imgs";
+	
+	public static PendingIntent piTimerNotifications;
 	
 	public static void initDataDirs() {
 		new File(DATA_DIR).mkdirs();
@@ -100,7 +107,25 @@ public class Max {
         return b.toString();
     }
 	
+    public static void runTimer(Context c) {
+    	Log.i("Friendica", "try runTimer");
+    	if (piTimerNotifications != null) return;
+    	AlarmManager a = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+    	piTimerNotifications = PendingIntent.getService(c, 1, new Intent(c, NotificationCheckerService.class), 0);
+    	a.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0, AlarmManager.INTERVAL_FIFTEEN_MINUTES, piTimerNotifications);
+    	Toast.makeText(c, "Friendica: Notif. check timer run", Toast.LENGTH_SHORT).show();
+    	Log.i("Friendica", "done runTimer");
+    }
     
+    public static void cancelTimer(Context c) {
+    	Log.i("Friendica", "try cancelTimer");
+    	if (piTimerNotifications == null) return;
+    	AlarmManager a = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+    	a.cancel(piTimerNotifications);
+    	piTimerNotifications = null;
+    	Toast.makeText(c, "Friendica: Notif. check timer cancel", Toast.LENGTH_SHORT).show();
+    	Log.i("Friendica", "done cancelTimer");
+    }
 
     public static String readFile(String path) throws IOException {
     	FileInputStream stream = new FileInputStream(new File(path));
@@ -376,7 +401,7 @@ public class Max {
 		
 	}
 
-	private static class ImageLoadTask extends AsyncTask<Void, ImageSpan, Void> {
+	private static class ImageLoadTask extends AsyncTask<Void, Object, Void> {
 
 		private static final String TAG = "friendica01.Max.ImageLoadTask";
 		
@@ -416,10 +441,14 @@ public class Max {
 					Log.d(TAG, "Download done");
 				}
 
-				// we use publishProgress to run some code on the
-				// UI thread to actually show the image
-				// -> onProgressUpdate()
-				publishProgress(img);
+				if (cachedFile.isFile()) {
+					Drawable d = new BitmapDrawable(resources, cachedFile.getAbsolutePath());
+					
+					// we use publishProgress to run some code on the
+					// UI thread to actually show the image
+					// -> onProgressUpdate()
+					publishProgress(img, d);
+				}
 
 			}
 
@@ -428,22 +457,23 @@ public class Max {
 		}
 
 		@Override
-		protected void onProgressUpdate(ImageSpan... values) {
+		protected void onProgressUpdate(Object... values) {
 
 			// save ImageSpan to a local variable just for convenience
-			ImageSpan img = values[0];
+			ImageSpan img = (ImageSpan) values[0];
+			Drawable d = (Drawable) values[1];
 
 			// now we get the File object again. so remeber to always return
 			// the same file for the same ImageSpan object
 			File cache = getImageFile(img);
 
 			// if the file exists, show it
-			if (cache.isFile()) {
+			//if (cache.isFile()) {
 
 				Log.d(TAG, "File OK");
 				
 				// first we need to get a Drawable object
-				Drawable d = new BitmapDrawable(resources, cache.getAbsolutePath());
+				//Drawable d = new BitmapDrawable(resources, cache.getAbsolutePath());
 				
 				// next we do some scaling
 				int width, height;
@@ -479,10 +509,10 @@ public class Max {
 				//finally we have to update the TextView with our
 				// updates Spannable to display the image
 				htmlTextView.setText(htmlSpannable);
-			} else {
-				Log.e(TAG, "File NOT FOUND = Download error");
+			//} else {
+			//	Log.e(TAG, "File NOT FOUND = Download error");
 				
-			}
+			//}
 		}
 
 		private File getImageFile(ImageSpan img) {

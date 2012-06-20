@@ -21,6 +21,7 @@ import android.util.Log;
 
 
 public class FileUploadService extends IntentService {
+	private static final String TAG="Friendica/FileUploadService";
 	
 	/**
 	 * Clipboard ID to upload to.

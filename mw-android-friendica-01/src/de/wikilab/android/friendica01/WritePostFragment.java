@@ -3,6 +3,7 @@ package de.wikilab.android.friendica01;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class WritePostFragment extends Fragment {
+	private static final String TAG="Friendica/WritePostFragment";
+	
 
 	Button sendBtn;
 	TextView viewLatLon;
@@ -82,6 +85,26 @@ public class WritePostFragment extends Fragment {
 			lm.removeUpdates(locationListener);
 			this.locationListenerAttached = false;
 		}
+	}
+	
+	public void handleSendIntent(Intent inte) {
+		String out = "";
+		if (inte.getDataString() != null) {
+			out += "Data: "+out+"\n";
+		}
+		if (inte.hasExtra(Intent.EXTRA_TITLE)) {
+			out += "Title: "+inte.getStringExtra(Intent.EXTRA_TITLE)+"\n";
+		}
+		if (inte.hasExtra(Intent.EXTRA_TEXT)) {
+			out += "Text: "+inte.getStringExtra(Intent.EXTRA_TEXT)+"\n";
+		}
+		for(String key:inte.getExtras().keySet()) {
+
+			if (inte.hasExtra(Intent.EXTRA_TEXT)) {
+				out += "Extra \""+key+"\": "+inte.getStringExtra(key)+"\n";
+			}
+		}
+		((EditText) myView.findViewById(R.id.maintb)).setText(out);
 	}
 	
 	/** Called when the activity is first created. */

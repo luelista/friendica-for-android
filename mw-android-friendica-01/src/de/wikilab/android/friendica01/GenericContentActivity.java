@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GenericContentActivity extends FragmentActivity implements FragmentParentListener {
+	private static final String TAG="Friendica/GenericContentActivity";
+	
 	TextView header_text;
 	ContentFragment frag;
 	

@@ -15,6 +15,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 public class PhotoGalleryFragment extends ContentFragment  implements FragmentParentListener {
+	private static final String TAG="Friendica/PhotoGalleryFragment";
+	
 	GridView list;
 
 	@Override

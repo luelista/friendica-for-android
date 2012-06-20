@@ -15,6 +15,8 @@ public final class R {
         public static final int slide_out_to_top=0x7f040003;
     }
     public static final class array {
+        public static final int notification_interval_values=0x7f090002;
+        public static final int notification_intervals=0x7f090001;
         public static final int supported_protocols=0x7f090000;
     }
     public static final class attr {

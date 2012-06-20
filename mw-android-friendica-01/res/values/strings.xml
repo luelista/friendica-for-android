@@ -28,17 +28,28 @@
     <string name="post">Post</string>
     
     
-		<string name="mm_timeline">Timeline</string>
-		<string name="mm_notifications">Notifications</string>
-		<string name="mm_mywall">My Wall</string>
-		<string name="mm_myphotoalbums">My Photo Albums</string>
-		<string name="mm_friends">Friends</string>
-		<string name="mm_friendrequests">Friend Requests</string>
-		<string name="mm_updatemystatus">Update My Status</string>
-		<string name="mm_takephoto">Take Photo And Upload</string>
-		<string name="mm_selectphoto">Select Photo And Upload</string>
-		<string name="mm_preferences">Preferences</string>
-		<string name="mm_logout">Log Out</string>
-		
+	<string name="mm_timeline">Timeline</string>
+	<string name="mm_notifications">Notifications</string>
+	<string name="mm_mywall">My Wall</string>
+	<string name="mm_myphotoalbums">My Photo Albums</string>
+	<string name="mm_friends">Friends</string>
+	<string name="mm_friendrequests">Friend Requests</string>
+	<string name="mm_updatemystatus">Update My Status</string>
+	<string name="mm_takephoto">Take Photo And Upload</string>
+	<string name="mm_selectphoto">Select Photo And Upload</string>
+	<string name="mm_preferences">Preferences</string>
+	<string name="mm_logout">Log Out</string>
+	
     <string name="fake_data_notice">NOTE: As Friendica\&apos;s API doesn\&apos;t support photo albums at the moment, only example photos from my Panoramio profile are shown. <i>(tap to close)</i></string>
+    
+    <string-array name="notification_intervals">
+        <item>every 15 minutes</item>	<item>every half hour</item>	<item>every hour</item>
+        <item>every half day</item>		<item>every day</item>
+    </string-array>
+    
+    <string-array name="notification_interval_values">
+        <item>900000</item>				<item>1800000</item>			<item>3600000</item>
+        <item>43200000</item>			<item>86400000</item>
+    </string-array>
+    
 </resources>

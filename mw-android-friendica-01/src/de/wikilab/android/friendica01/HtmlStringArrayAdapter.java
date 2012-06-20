@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class HtmlStringArrayAdapter extends ArrayAdapter<String> {
-
-	private static final String TAG = "friendica01.MainScreenListAdapter";
+	private static final String TAG="Friendica/HtmlStringArrayAdapter";
+	
 
 	public int selectedItemIndex = -1;
 	

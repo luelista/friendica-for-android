@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 public class PostDetailFragment extends ContentFragment {
+	private static final String TAG="Friendica/PostDetailFragment";
+	
 
 	ListView list;
 	ProgressBar progbar;

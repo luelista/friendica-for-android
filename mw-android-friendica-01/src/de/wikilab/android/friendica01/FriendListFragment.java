@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FriendListFragment extends ContentFragment implements FragmentParentListener {
+	private static final String TAG="Friendica/FriendListFragment";
+	
 	GridView list;
 	ProgressBar progbar;
 	

@@ -50,6 +50,8 @@ import android.util.Base64;
 import android.util.Log;
 
 public class TwAjax extends Thread {
+	private static final String TAG="Friendica/TwAjax";
+	
 	
 	{
 		java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);

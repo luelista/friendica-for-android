@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class WelcomeFragment extends Fragment {
+	private static final String TAG="Friendica/WelcomeFragment";
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

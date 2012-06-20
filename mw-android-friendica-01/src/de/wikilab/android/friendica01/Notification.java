@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Notification {
+	private static final String TAG="Friendica/Notification";
+	
 	
 	public String href,name,url,photo,date,seen,content;
 	public boolean isUnread = false;

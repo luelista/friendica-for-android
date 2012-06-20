@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PhotoGalleryAdapter extends BaseAdapter {
+	private static final String TAG="Friendica/PhotoGalleryAdapter";
+	
     private Context mContext;
     private Pic[] mPics ;
     private int viewId;

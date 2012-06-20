@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PostListAdapter extends ArrayAdapter<JSONObject> {
-
-	private static final String TAG = "friendica01.PostListAdapter";
+	private static final String TAG="Friendica/PostListAdapter";
+	
 	
 	public PostListAdapter(Context context, JSONObject[] objects) {
 		super(context, R.layout.pl_listitem, objects);
@@ -33,7 +33,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 		}
 		
 		JSONObject post = (JSONObject) getItem(position);
-
+		
 		final ImageView profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
 		profileImage.setImageResource(R.drawable.ic_launcher);
 		try {

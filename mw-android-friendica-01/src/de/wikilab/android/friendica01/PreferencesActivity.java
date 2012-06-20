@@ -10,15 +10,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
 public class PreferencesActivity  extends PreferenceActivity implements OnSharedPreferenceChangeListener  {
+	private static final String TAG="Friendica/PreferencesActivity";
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +51,28 @@ public class PreferencesActivity  extends PreferenceActivity implements OnShared
         p2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference arg0) {
-
 	          	startActivity(new Intent(Settings.ACTION_WIFI_IP_SETTINGS));
 				return true;
 			}
         });
+        
+        CheckBoxPreference p_notif = (CheckBoxPreference) findPreference("notification_enable");
+        p_notif.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				restartTimer();
+				return true;
+			}
+		});
     }
 
+    private void restartTimer() {
+    	Max.cancelTimer(this);
+    	CheckBoxPreference p2 = (CheckBoxPreference) findPreference("notification_enable");
+        if (p2.isChecked()) {
+        	Max.runTimer(this);
+        }
+    }
 
     @Override 
     protected void onResume(){
