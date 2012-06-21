@@ -99,7 +99,6 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		if (message.equals("Set Header Text")) {
 			setHeadertext((String) arg1);
 		}
-		
 		if (message.equals("Navigate Main Menu")) {
 			navigate((String) arg1);
 		}

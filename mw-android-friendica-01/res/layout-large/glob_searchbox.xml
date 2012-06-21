@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!-- SEARCHBOX ON TABLET VIEW -->
+
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_box"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    android:layout_toLeftOf="@+id/glob_progressbar"
+    android:hint="Search..." >
+
+</EditText>

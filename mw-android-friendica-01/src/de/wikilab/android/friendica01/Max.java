@@ -525,6 +525,26 @@ public class Max {
 		return url.replaceAll("[^a-z0-9.-]", "_");
 		
 	}
+
+	public static void alert(Context ctx, String text) {
+		alert(ctx, text, null, "OK");
+	}
+	public static void alert(Context ctx, String text, String title) {
+		alert(ctx, text, title, "OK");
+	}
+	public static void alert(Context ctx, String text, String title, String okButtonText) {
+		AlertDialog ad = new AlertDialog.Builder(ctx).create();  
+	    ad.setCancelable(false); // This blocks the 'BACK' button  
+	    ad.setMessage(text);
+	    ad.setTitle(title);
+	    ad.setButton(okButtonText, new DialogInterface.OnClickListener() {  
+	        @Override  
+	        public void onClick(DialogInterface dialog, int which) {  
+	            dialog.dismiss();                      
+	        }  
+	    });  
+	    ad.show();
+	}
 	
 
 }
