@@ -23,7 +23,7 @@
     <string name="upload_file">Upload a photo</string>
     <string name="upload_now">Start upload</string>
     <string name="viewLatLon">Post Current Location</string>
-    <string name="proxy_settings"><u>Proxy Settings...</u></string>
+    <string name="proxy_settings"><u>Proxy / SSL Settings...</u></string>
     <string name="post_status_update">Post Status Update</string>
     <string name="post">Post</string>
     
@@ -33,7 +33,7 @@
 	<string name="mm_mywall">My Wall</string>
 	<string name="mm_myphotoalbums">My Photo Albums</string>
 	<string name="mm_friends">Friends</string>
-	<string name="mm_friendrequests">Friend Requests</string>
+	<string name="mm_directmessages">Messages</string>
 	<string name="mm_updatemystatus">Update My Status</string>
 	<string name="mm_takephoto">Take Photo And Upload</string>
 	<string name="mm_selectphoto">Select Photo And Upload</string>

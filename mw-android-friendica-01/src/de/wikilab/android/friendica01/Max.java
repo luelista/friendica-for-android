@@ -32,13 +32,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -535,7 +535,7 @@ public class Max {
 	public static void alert(Context ctx, String text, String title, String okButtonText) {
 		AlertDialog ad = new AlertDialog.Builder(ctx).create();  
 	    ad.setCancelable(false); // This blocks the 'BACK' button  
-	    ad.setMessage(text);
+	    ad.setMessage(Html.fromHtml(text));
 	    ad.setTitle(title);
 	    ad.setButton(okButtonText, new DialogInterface.OnClickListener() {  
 	        @Override  
@@ -544,6 +544,7 @@ public class Max {
 	        }  
 	    });  
 	    ad.show();
+	    ((TextView)ad.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 	
 

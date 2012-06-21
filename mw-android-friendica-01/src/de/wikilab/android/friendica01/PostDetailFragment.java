@@ -99,10 +99,11 @@ public class PostDetailFragment extends ContentFragment {
 						for(int i = 0; i < j.length(); i++)	jsonObjectArray.add(j.getJSONObject(i));
 						
 						//ListView lvw = (ListView) findViewById(R.id.listview);
-	
-						list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
+						PostListAdapter pla = new PostListAdapter(getActivity(), jsonObjectArray);
+						pla.isPostDetails=true;
+						list.setAdapter(pla);
 					} else {
-						Max.alert(getActivity(), "Sorry, your Friendica server doesn't support conversation view!");
+						Max.alert(getActivity(), "Sorry, your Friendica server doesn't support conversation view!<br><br>Refer to this page for more information: <a href='http://friendica-for-android.wiki-lab.net/notes#conv-view-note'>http://friendica-for-android.wiki-lab.net/notes#conv-view-note</a>");
 					}
 					
 				} catch (Exception e) {

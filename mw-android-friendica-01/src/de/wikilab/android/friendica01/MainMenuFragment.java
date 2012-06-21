@@ -96,7 +96,7 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 		MainList.add(getString(R.string.mm_mywall));
 		MainList.add(getString(R.string.mm_myphotoalbums));
 		MainList.add(getString(R.string.mm_friends));
-		// MainList.add(getString(R.string.mm_friendrequests));
+		MainList.add(getString(R.string.mm_directmessages));
 		MainList.add(getString(R.string.mm_updatemystatus));
 		MainList.add(getString(R.string.mm_takephoto));
 		MainList.add(getString(R.string.mm_selectphoto));

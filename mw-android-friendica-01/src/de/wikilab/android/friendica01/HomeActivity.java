@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,7 +72,35 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 			
 		}
 		
-		ViewServer.get(this).addWindow(this);
+		//ViewServer.get(this).addWindow(this);
+		
+		Log.i(TAG, "Should check for updates?");
+		
+		if (prefs.getBoolean("updateChecker", true)) {
+			Log.i(TAG, "Checking for updates...");
+			final TwAjax updateChecker = new TwAjax(this, true, false);
+			updateChecker.getUrlContent("http://friendica-for-android.wiki-lab.net/docs/update.txt", new Runnable() {
+				@Override
+				public void run() {
+					String res = updateChecker.getResult();
+					if (res != null && res.startsWith("UPDATE=")) {
+						try {
+							int version = Integer.parseInt(res.substring(7));
+							int currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0 ).versionCode;
+							Log.i(TAG, "UpdateCheck onlineVersion="+version+" currentVersion="+currentVersion);
+							if (version > currentVersion) {
+								Max.alert(HomeActivity.this, "Open the app's website to download the newest version:<br><a href='https://github.com/max-weller/friendica-for-android/downloads'>https://github.com/max-weller/friendica-for-android/downloads</a><br><br>(Go to Preferences to disable update check)", "Update available!");
+							}
+						} catch (NameNotFoundException e) {
+							e.printStackTrace();
+							Log.e(TAG, "UpdateCheck failed! (2)");
+						}
+					} else {
+						Log.e(TAG, "UpdateCheck failed!");
+					}
+				}
+			});
+		}
 		
 	}
 
@@ -181,7 +211,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		if (arg1.equals("Log Out")) {
 			SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this).edit();
 			//prefs.putString("login_server", null); //keep server and user ...
-			//prefs.putString("login_user", null);
+			prefs.putString("login_user", null);
 			prefs.putString("login_password", null); //...only remove password
 			prefs.commit();
 			

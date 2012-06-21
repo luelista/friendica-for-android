@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android" android:title="TeamWiki Einstellungen">
-    
+    <!-- 
     <PreferenceCategory android:title="Dateiupload" android:key="s2">
-        <CheckBoxPreference android:title="Sofortupload" android:summaryOn="Ohne Rückfrage hochladen" android:summaryOff="Vor Upload nachfragen (ermöglicht Clipboard-Auswahl)" android:key="upload_immediately"></CheckBoxPreference><CheckBoxPreference android:summary='z.B. "Test File.JPG" --&gt; "test_file.jpg"' android:title="Dateinamen anpassen" android:key="upload_consolidate_filenames"></CheckBoxPreference>
+        <CheckBoxPreference android:title="Sofortupload" android:summaryOn="Ohne Rückfrage hochladen" android:summaryOff="Vor Upload nachfragen (ermöglicht Clipboard-Auswahl)" android:key="upload_immediately"></CheckBoxPreference><CheckBoxPreference android:summary='z.B. "Test File.JPG" -&gt; "test_file.jpg"' android:title="Dateinamen anpassen" android:key="upload_consolidate_filenames"></CheckBoxPreference>
         <CheckBoxPreference android:title="Nach Upload URL kopieren" android:key="upload_copy_url_to_clipboard"></CheckBoxPreference>
     </PreferenceCategory>
-    
-    <PreferenceCategory android:title="Notifications" android:key="s3">
+     -->
+    <PreferenceCategory android:title="Notifications (coming soon)" android:key="s3">
         <CheckBoxPreference android:summary="May drain battery" android:title="Enable Notifications" android:key="notification_enable"></CheckBoxPreference>
         <ListPreference android:title="Check Interval" android:key="notification_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" />
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Pfade" android:key="s6">
-        <EditTextPreference android:key="path_preview_cache" android:title="Cache-Ordner" android:defaultValue="/sdcard/Android/net.teamwiki.clip/cache"></EditTextPreference>
-        <EditTextPreference android:title="Download-Ordner" android:key="path_download" android:defaultValue="/sdcard/download"></EditTextPreference>
+    <PreferenceCategory android:title="Update Check" android:key="s6">
+        <CheckBoxPreference android:summary="" android:title="Check For Updates" android:key="updateChecker" android:defaultValue="true"></CheckBoxPreference>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="SSL" android:key="s6">
+        <CheckBoxPreference android:summary="For Test Only (Unsafe!)" android:title="Disable All Certificate Checks" android:key="ssl_unsafe" android:defaultValue="false"></CheckBoxPreference>
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Mitteilungen" android:key="s4">

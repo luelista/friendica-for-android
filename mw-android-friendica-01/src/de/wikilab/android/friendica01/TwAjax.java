@@ -287,6 +287,10 @@ public class TwAjax extends Thread {
 	public TwAjax(Context ctx, boolean updateProxySettings, boolean initializeLoginData) {
 		if (initializeLoginData) this.initializeLoginData(ctx);
 		if (updateProxySettings) this.updateProxySettings(ctx);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		if(prefs.getBoolean("ssl_unsafe", false) == true) ignoreSSLCerts = true;
+		
 	}
 	
 	public String getURL() {

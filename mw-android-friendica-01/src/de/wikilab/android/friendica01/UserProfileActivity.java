@@ -5,12 +5,15 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +31,25 @@ public class UserProfileActivity extends FragmentActivity implements FragmentPar
 		setContentView(R.layout.userprofile);
 		
 		
-		
+		Button btn;
+		btn = (Button) findViewById(R.id.btn_nav_1);
+		if (btn != null) {
+			btn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					findViewById(R.id.content_fragment_1).setVisibility(View.VISIBLE);
+					findViewById(R.id.content_fragment_2).setVisibility(View.GONE);
+				}
+			});
+			btn = (Button) findViewById(R.id.btn_nav_2);
+			btn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					findViewById(R.id.content_fragment_1).setVisibility(View.GONE);
+					findViewById(R.id.content_fragment_2).setVisibility(View.VISIBLE);
+				}
+			});
+		}
 		
 		final TwAjax t = new TwAjax(this, true, true);
 		t.getUrlContent(Max.getServer(this) + "/api/users/show/" + userId, new Runnable() {
@@ -68,8 +89,12 @@ public class UserProfileActivity extends FragmentActivity implements FragmentPar
 
 	@Override
 	public void OnFragmentMessage(String message, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
 		
+		if (message.equals("Navigate Conversation")) {
+			Intent in = new Intent(this, GenericContentActivity.class);
+			in.putExtra("target", "conversation:" + arg1);
+			startActivity(in);
+		}
 	}
 	
 }
