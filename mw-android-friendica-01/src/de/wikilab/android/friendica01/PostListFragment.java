@@ -74,8 +74,22 @@ public class PostListFragment extends ContentFragment {
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> self, View view, int position, long id) {
-				((FragmentParentListener)getActivity()).OnFragmentMessage("Navigate Conversation", String.valueOf(id), null);
-				
+				if (refreshTarget.equals("notifications")) {
+					SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
+					final Notification n = ((Notification.NotificationsListAdapter)getListAdapter()).getItem(position-1);
+					n.resolveTarget(getActivity(), new Runnable() {
+						@Override public void run() {
+							SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
+							if (n.targetComponent != null && n.targetComponent.equals("conversation:")) {
+								SendMessage("Navigate Conversation", String.valueOf(n.targetData), null);
+							} else {
+								Max.alert(getActivity(), "Unable to navigate to notification target<br><br><a href='" + n.targetUrl + "'>" + n.targetUrl + "</a>", "Not implemented");
+							}
+						}
+					});
+				} else {
+					SendMessage("Navigate Conversation", String.valueOf(id), null);
+				}
 			}
 		});
 		
@@ -99,18 +113,18 @@ public class PostListFragment extends ContentFragment {
 		refreshTarget = target;
 		loadFinished = false;
 		
-		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
+		SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
 		if (target != null && target.equals("mywall")) {
-			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_mywall), null);
+			SendMessage("Set Header Text", getString(R.string.mm_mywall), null);
 			loadWall(null);
 		} else if (target != null && target.startsWith("userwall:")) {
-			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_mywall), null);
+			SendMessage("Set Header Text", getString(R.string.mm_mywall), null);
 			loadWall(target.substring(9));
 		} else if (target != null && target.equals("notifications")) {
-			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_notifications), null);
+			SendMessage("Set Header Text", getString(R.string.mm_notifications), null);
 			loadNotifications();
 		} else {
-			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", getString(R.string.mm_timeline), null);
+			SendMessage("Set Header Text", getString(R.string.mm_timeline), null);
 			loadTimeline();
 		}
 	}
@@ -121,15 +135,20 @@ public class PostListFragment extends ContentFragment {
 		progbar.setVisibility(View.GONE);*/
 		if (curLoadPage == 1) reflvw.onRefreshComplete();
 
-		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
+		SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
 		
 	}
-	
+
 	private PostListAdapter getPostListAdapter() {
-		Adapter a = list.getAdapter();
-		if (a instanceof WrapperListAdapter) a = ((WrapperListAdapter)a).getWrappedAdapter();
+		Adapter a = getListAdapter();
 		if (a instanceof PostListAdapter) return (PostListAdapter)a;
 		return null;
+	}
+
+	private Adapter getListAdapter() {
+		Adapter a = list.getAdapter();
+		if (a instanceof WrapperListAdapter) a = ((WrapperListAdapter)a).getWrappedAdapter();
+		return a;
 	}
 	
 	private void setItems(JSONArray j) throws JSONException {
@@ -159,8 +178,7 @@ public class PostListFragment extends ContentFragment {
 	public void loadTimeline() {
 		final TwAjax t = new TwAjax(getActivity(), true, true);
 		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/home_timeline.json?count=" + String.valueOf(ITEMS_PER_PAGE) + "&page=" + String.valueOf(curLoadPage), new Runnable() {
-			@Override
-			public void run() {
+			@Override public void run() {
 				try {
 					JSONArray j = (JSONArray) t.getJsonResult();
 
@@ -182,8 +200,7 @@ public class PostListFragment extends ContentFragment {
 		String url = Max.getServer(getActivity()) + "/api/statuses/user_timeline.json?count=" + String.valueOf(ITEMS_PER_PAGE) + "&page=" + String.valueOf(curLoadPage);
 		if (userId != null) url += "&user_id=" + userId;
 		t.getUrlContent(url, new Runnable() {
-			@Override
-			public void run() {
+			@Override public void run() {
 				try {
 					JSONArray j = (JSONArray) t.getJsonResult();
 
@@ -204,8 +221,7 @@ public class PostListFragment extends ContentFragment {
 	void loadNotifications() {
 		final TwAjax t = new TwAjax(getActivity(), true, true);
 		t.getUrlXmlDocument(Max.getServer(getActivity()) + "/ping", new Runnable() {
-			@Override
-			public void run() {
+			@Override public void run() {
 				try {
 					Document xd = t.getXmlDocumentResult();
 					Node el = xd.getElementsByTagName("notif").item(0);

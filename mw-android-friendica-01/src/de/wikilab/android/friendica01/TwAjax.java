@@ -29,23 +29,23 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -104,6 +104,8 @@ public class TwAjax extends Thread {
 	private boolean convertToBitmap = false;
 	private boolean convertToXml = false;
 	private String downloadToFile = null;
+	private String fetchHeader = null;
+	public Header[] fetchHeaderResult = null;
 	private Bitmap myBmpResult;
 	private String myHttpAuthUser, myHttpAuthPass;
 	private Document myXmlDocument;
@@ -257,16 +259,23 @@ public class TwAjax extends Thread {
 	*/
 	
 	public void updateProxySettings(Context ctx) {
-		ProxySelector defaultProxySelector = ProxySelector.getDefault();
-        List<Proxy> proxyList = defaultProxySelector.select(URI.create("http://frnd.tk"));
-        //Log.i("TwAjax", "proxyCount="+proxyList.size()+"|"+((InetSocketAddress)proxyList.get(0).address()).getHostName());
-        if (proxyList.size() == 0 || proxyList.get(0).address() == null) {
-        	return;
-		}
-		myProxyIp = ((InetSocketAddress)proxyList.get(0).address()).getHostName();
-		myProxyPort = ((InetSocketAddress)proxyList.get(0).address()).getPort();
-		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		myProxyIp = prefs.getString("proxy_host", null);
+		if (myProxyIp == null || myProxyIp.equals("")) {
+			myProxyIp = null;
+			
+			ProxySelector defaultProxySelector = ProxySelector.getDefault();
+	        List<Proxy> proxyList = defaultProxySelector.select(URI.create("http://frnd.tk"));
+	        //Log.i("TwAjax", "proxyCount="+proxyList.size()+"|"+((InetSocketAddress)proxyList.get(0).address()).getHostName());
+	        if (proxyList.size() == 0 || proxyList.get(0).address() == null) {
+	        	return;
+			}
+			myProxyIp = ((InetSocketAddress)proxyList.get(0).address()).getHostName();
+			myProxyPort = ((InetSocketAddress)proxyList.get(0).address()).getPort();
+		} else {
+			myProxyPort = Integer.valueOf(prefs.getString("proxy_port", null));
+		}
+		
 		//for(String key:prefs.getAll().keySet()) {
 		//Log.w("PREF:",key+"="+prefs.getAll().get(key).toString());	
 		//}
@@ -417,6 +426,9 @@ public class TwAjax extends Thread {
 		DefaultHttpClient httpclient = getNewHttpClient();
         setHttpClientProxy(httpclient);
         httpclient.getParams().setParameter("http.protocol.content-charset", "UTF-8");
+        //final HttpParams params = new BasicHttpParams();
+        HttpClientParams.setRedirecting(httpclient.getParams(), false);
+
         HttpRequestBase m;
         if (myMethod == "POST") {
 	        m = new HttpPost(myUrl);
@@ -436,7 +448,12 @@ public class TwAjax extends Thread {
         HttpResponse response = httpclient.execute(m);
         //InputStream is = response.getEntity().getContent();
         myHttpStatus = response.getStatusLine().getStatusCode();
-        if (this.downloadToFile != null) {
+        if (this.fetchHeader != null) {
+        	this.fetchHeaderResult = response.getHeaders(this.fetchHeader);
+        	Header[] h = response.getAllHeaders();
+        	for(Header hh : h) Log.d(TAG, "Header "+hh.getName()+"="+hh.getValue());
+        	
+        } else if (this.downloadToFile != null) {
         	Log.v("TwAjax", "runDefault downloadToFile="+downloadToFile);
             // download the file
             InputStream input = new BufferedInputStream(response.getEntity().getContent());
@@ -555,6 +572,18 @@ public class TwAjax extends Thread {
 		    return writer.toString();
 		} else {        
 		    return "";
+		}
+	}
+	public void fetchUrlHeader(String method, String url, String headerFieldToFetch, Runnable callback) {
+		this.myMethod = method;
+		this.myUrl = url;
+		this.myCallback = callback;
+		this.fetchHeader = headerFieldToFetch;
+		if (callback != null) {
+			this.myHandler = new Handler();
+			this.start();
+		} else {
+			this.run();
 		}
 	}
 	public void getUrlContent(String url, Runnable callback) {

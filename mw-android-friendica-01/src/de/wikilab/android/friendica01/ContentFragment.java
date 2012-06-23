@@ -32,4 +32,8 @@ public abstract class ContentFragment extends Fragment {
 	
 	protected abstract void onNavigate(String target);
 	
+	protected void SendMessage(String message, Object arg1, Object arg2) {
+		((FragmentParentListener)getActivity()).OnFragmentMessage(message, arg1, arg2);
+	}
+	
 }

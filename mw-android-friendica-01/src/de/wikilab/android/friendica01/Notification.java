@@ -2,6 +2,8 @@ package de.wikilab.android.friendica01;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,8 @@ public class Notification {
 	public String href,name,url,photo,date,seen,content;
 	public boolean isUnread = false;
 	
+	public String targetUrl, targetComponent, targetData;
+	
 	public static Notification fromXmlNode(Node d) {
 		Notification n = new Notification();
 		
@@ -45,6 +49,22 @@ public class Notification {
 		return n;
 	}
 	
+	public void resolveTarget(Context ctx, final Runnable done) {
+		final TwAjax resT = new TwAjax(ctx, true, true);
+		resT.fetchUrlHeader("GET", this.href, "Location", new Runnable() {
+			@Override public void run() {
+				
+				targetUrl = resT.fetchHeaderResult[0].getValue();
+				Matcher m = Max.regeximatch(".*/display/.*/([0-9]+)/?", targetUrl);
+				if (m.matches()) {
+					targetComponent = "conversation:"; targetData = m.group(1);
+				}
+				
+				done.run();
+			}
+		});
+	}
+	
 	public static class NotificationsListAdapter extends ArrayAdapter<Notification> {
 		
 		private static final String TAG = "friendica01.PostListAdapter";
@@ -63,7 +83,7 @@ public class Notification {
 			}
 			
 			Notification post = (Notification) getItem(position);
-	
+			
 			final ImageView profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
 			profileImage.setImageResource(R.drawable.ic_launcher);
 			try {

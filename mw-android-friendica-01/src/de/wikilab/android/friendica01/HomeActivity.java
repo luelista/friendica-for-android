@@ -32,6 +32,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	PhotoGalleryFragment frag_photos = new PhotoGalleryFragment();
 	FriendListFragment frag_friendlist = new FriendListFragment();
 	PostDetailFragment frag_postdetail = new PostDetailFragment();
+	MessageViewFragment frag_messages = new MessageViewFragment();
 	//PreferenceFragment frag_preferences = new PreferenceFragment();
 	
 	String currentMMItem = null;
@@ -203,6 +204,11 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 			in.setType("image/*");
 			startActivityForResult(in, RQ_SELECT_PHOTO);
 		}
+		if (arg1.equals("Messages")) {
+			//Intent in = new Intent(HomeActivity.this, MessagesActivity.class);
+			//startActivity(in);
+			navigateMessages("msg:all");
+		}
 		
 		if (arg1.equals("Preferences")) {
 			navigatePreferences();
@@ -289,6 +295,22 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	    		t.commit();
 	    	}
     		frag_photos.navigate(galleryTarget);
+	    }
+	}
+
+	private void navigateMessages(String target) {
+	    if (! isMultiCol()) {
+	        Intent showContent = new Intent(getApplicationContext(), GenericContentActivity.class);
+	        showContent.putExtra("target", target);
+	        startActivity(showContent);
+	    } else {
+	    	Fragment viewerFragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.view_fragment_container);
+	    	if (viewerFragment != frag_messages) {
+	    		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+	    		t.replace(R.id.view_fragment_container, frag_messages);
+	    		t.commit();
+	    	}
+	    	frag_messages.navigate(target);
 	    }
 	}
 	

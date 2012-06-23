@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
@@ -157,6 +159,7 @@ public class Max {
 	 */
 	public static void tryLogin(final Activity ctx) {
 		final ProgressDialog pd = new ProgressDialog(ctx);
+		pd.setMessage("Logging in...");
 		pd.show();		
 
 		String server = Max.getServer(ctx);
@@ -524,6 +527,10 @@ public class Max {
 	public static String cleanFilename(String url) {
 		return url.replaceAll("[^a-z0-9.-]", "_");
 		
+	}
+	
+	public static Matcher regeximatch(String pattern, String string) {
+		return Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(string);
 	}
 
 	public static void alert(Context ctx, String text) {

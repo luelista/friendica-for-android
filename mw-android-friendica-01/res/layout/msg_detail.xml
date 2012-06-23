@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header_gradient"
+        android:orientation="horizontal" >
+
+        <include layout="@layout/header_logo" />
+
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/header_logo"
+            android:layout_toRightOf="@+id/header_logo"
+            android:text="Direct Messages"
+            android:textColor="#000" >
+        </TextView>
+    </RelativeLayout>
+
+    <TableLayout
+        android:id="@+id/subheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header">
+
+        <TableRow>
+        <TextView
+            android:text="Subject:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp" />
+        <TextView
+            android:id="@+id/subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow>
+        <TextView
+            android:text="Sender:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp" />
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        </TableRow>
+        <TableRow>
+        <TextView
+            android:text="Recipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp" />
+        <TextView
+            android:id="@+id/userNameRecipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        </TableRow>
+    </TableLayout>
+
+    <WebView
+        android:id="@+id/htmlContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/subheader" >
+    </WebView>
+
+</RelativeLayout>

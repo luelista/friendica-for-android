@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Crap! include Tag not working as root element, therefore requires this completely useless LinearLayout! -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content">
+ <include    layout="@layout/msg_listitem_large"/>
+</LinearLayout>

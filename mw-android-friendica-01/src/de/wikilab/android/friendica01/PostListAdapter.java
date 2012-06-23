@@ -1,6 +1,7 @@
 package de.wikilab.android.friendica01;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.List;
 
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.util.Log;
@@ -177,7 +179,13 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 		
 		if (H.dateTime != null) {
 			try {
-				H.dateTime.setText("on "+post.getString("published"));
+				//H.dateTime.setText("on "+post.getString("published"));
+				
+				
+				H.dateTime.setText(DateUtils.getRelativeDateTimeString(parent.getContext(), 
+						java.util.Date.parse(post.getString("published")),
+						DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_24HOUR));
+				
 			} catch (Exception e) {
 				H.dateTime.setText("Invalid Dataset!");
 			}

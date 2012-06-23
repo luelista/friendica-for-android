@@ -39,18 +39,17 @@ public class PostDetailFragment extends ContentFragment {
 		if (myView != null) {
 			
 		}
-		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
+		SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
 		if (target != null && target.startsWith("conversation:")) {
 			conversationId = target.substring(13);
 			
-			((FragmentParentListener)getActivity()).OnFragmentMessage("Set Header Text", "Post Details ("+String.valueOf(conversationId)+")", null);
+			SendMessage("Set Header Text", "Post Details ("+String.valueOf(conversationId)+")", null);
 			loadInitialPost();
 		}
 	}
 
 	public void hideProgBar() {
-
-		((FragmentParentListener)getActivity()).OnFragmentMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
+		SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
 	}
 
 	public void loadInitialPost() {

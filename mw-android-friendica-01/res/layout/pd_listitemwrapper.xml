@@ -4,13 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     
-    <LinearLayout android:padding="5dp" android:background="#dddddd" android:orientation="horizontal"  android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <LinearLayout android:padding="5dp" android:orientation="horizontal" android:background="@drawable/post_buttons_gradient" android:layout_width="fill_parent" android:layout_height="wrap_content">
         <TextView android:id="@+id/date" android:paddingRight="15dp" android:textColor="#666666" android:layout_width="wrap_content" android:layout_height="wrap_content" />
         
-        <Button android:id="@+id/btn_like" android:text="Like" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Button android:id="@+id/btn_dislike" android:text="DisLike" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Button android:id="@+id/btn_delete" android:text="Delete" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <ImageButton android:src="@drawable/toggle_like_off" android:contentDescription="@+id/btn_togglelike" android:text="Like" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingRight="8dp" android:background="#00000000" />
+        <TextView android:id="@+id/like_count" android:text="0 likes" android:paddingRight="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
         
+        <ImageButton android:src="@drawable/toggle_dislike_off" android:contentDescription="@+id/btn_toggledislike" android:text="DisLike" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingRight="8dp" android:background="#00000000" />
+        <TextView android:id="@+id/dislike_count" android:text="0 dislikes" android:paddingRight="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
+        
+        <ImageButton android:src="@drawable/toggle_star_off" android:contentDescription="@+id/btn_togglestar" android:text="Star" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingRight="8dp" android:background="#00000000" />
+        <TextView android:id="@+id/star_count" android:text="not starred" android:paddingRight="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
+        
+        <!-- 
+        <ImageButton android:src="@drawable/delete" android:contentDescription="@+id/btn_delete" android:text="Delete" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingRight="8dp" android:background="#00000000" />
+        <ImageButton android:src="@drawable/userprofile" android:contentDescription="@+id/btn_userinfo" android:text="User" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingRight="8dp" android:background="#00000000" />
+        <ImageButton android:src="@drawable/permissions" android:contentDescription="@+id/btn_permissions" android:text="User" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="#00000000" />
+         -->
     </LinearLayout>
     
     

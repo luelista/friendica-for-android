@@ -87,6 +87,11 @@ public class GenericContentActivity extends FragmentActivity implements Fragment
 				t.add(R.id.content_fragment, new PostDetailFragment());
 				t.commit();
 			}
+			if (target.startsWith("msg:")) {
+				FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+				t.add(R.id.content_fragment, new MessageViewFragment());
+				t.commit();
+			}
 		}
 
 	}
