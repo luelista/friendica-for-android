@@ -1,6 +1,6 @@
 
 
-== Screenshots ==
+## Screenshots ##
 
 ![Screenshot on tablet](https://lh4.googleusercontent.com/-rFte9uu59jg/T-b2ooprMUI/AAAAAAAALjQ/UWzOaXOfvqw/s912/Screenshot_2012-06-24-13-14-06.png)
 ![Screenshot on tablet](https://lh6.googleusercontent.com/-4GFD7y5PYRQ/T-b2w4CkX3I/AAAAAAAALjo/Gh_EVeXMVSg/s912/Screenshot_2012-06-24-13-11-07.png)
@@ -11,7 +11,7 @@
 ![Screenshot on tablet](https://lh3.googleusercontent.com/-91FJ81wxHcw/T-b2yfQP-KI/AAAAAAAALjw/jXKsAPkelfM/s912/Screenshot_2012-06-24-00-52-20.png)
 
 
-== More Screenhots ==
+## More Screenhots ##
 
 View Screenshots:
 
