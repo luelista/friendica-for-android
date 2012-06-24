@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android" android:title="TeamWiki Einstellungen">
-    <!-- 
-    <PreferenceCategory android:title="Dateiupload" android:key="s2">
-        <CheckBoxPreference android:title="Sofortupload" android:summaryOn="Ohne Rückfrage hochladen" android:summaryOff="Vor Upload nachfragen (ermöglicht Clipboard-Auswahl)" android:key="upload_immediately"></CheckBoxPreference>
-        <CheckBoxPreference android:summary='z.B. "Test File.JPG" -&gt; "test_file.jpg"' android:title="Dateinamen anpassen" android:key="upload_consolidate_filenames"></CheckBoxPreference>
-        <CheckBoxPreference android:title="Nach Upload URL kopieren" android:key="upload_copy_url_to_clipboard"></CheckBoxPreference>
-    </PreferenceCategory>
-     -->
+    
     <PreferenceCategory android:title="Notifications (coming soon)" android:key="s3">
         <CheckBoxPreference android:summary="May drain battery" android:title="Enable Notifications" android:key="notification_enable"></CheckBoxPreference>
         <ListPreference android:title="Check Interval" android:key="notification_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" />
@@ -19,10 +13,6 @@
     
     <PreferenceCategory android:title="SSL" android:key="s6">
         <CheckBoxPreference android:summary="For Test Only (Unsafe!)" android:title="Disable All Certificate Checks" android:key="ssl_unsafe" android:defaultValue="false"></CheckBoxPreference>
-    </PreferenceCategory>
-    
-    <PreferenceCategory android:title="Mitteilungen" android:key="s4">
-    	<Preference android:summary="(öffnet im Web-Browser)" android:title="Mitteilungsoptionen" android:key="nav_notification_prefs"></Preference>
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Network" android:key="s5">

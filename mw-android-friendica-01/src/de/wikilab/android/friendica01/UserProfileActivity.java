@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +28,7 @@ public class UserProfileActivity extends FragmentActivity implements FragmentPar
 		super.onCreate(savedInstanceState);
 		
 		userId= getIntent().getStringExtra("userId");
+		Log.i(TAG, "loading profile for userId="+userId);
 		
 		setContentView(R.layout.userprofile);
 		
@@ -70,8 +72,10 @@ public class UserProfileActivity extends FragmentActivity implements FragmentPar
 					
 					((TextView) findViewById(R.id.profile_content)).setText(Html.fromHtml(tx));
 					
-				} catch (JSONException e) {
-					e.printStackTrace();
+				} catch (Exception e) {
+
+					((TextView) findViewById(R.id.profile_content)).setText(Html.fromHtml("<b>Error loading profile data!</b><br><br>"+e.toString()+"<br><br>"+Max.Hexdump(t.getResult().getBytes())));
+					
 				}
 				
 				

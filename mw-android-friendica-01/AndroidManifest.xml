@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.wikilab.android.friendica01"
-    android:versionCode="5"
-    android:versionName="5.0" >
+    android:versionCode="7"
+    android:versionName="7.0" >
 
     
     <!--
@@ -42,7 +42,10 @@
 	6.0
 	- added MessageViewFragment to display list of messages
 	- and MessageDetailActivity to display details of single message, esp. for html formatting and images
-	- 
+	7.0
+	- click username/profileimage to navigate user profile
+	- click image thumbnail to view large image
+	- bugfix to FC in image upload
     -->
 
 
@@ -122,7 +125,7 @@
         <activity
             android:name=".FriendicaImgUploadActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
             <intent-filter android:label="@string/intf_fileupload2" >
                 <action android:name="android.intent.action.SEND" />
 

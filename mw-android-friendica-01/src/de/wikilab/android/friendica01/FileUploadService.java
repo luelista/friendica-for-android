@@ -44,7 +44,7 @@ public class FileUploadService extends IntentService {
 	private static final int UPLOAD_PROGRESS_ID = 2;
 	
 	int clipId, cbId;
-	String descText;
+	String descText, subject;
 	boolean deleteAfterUpload;
 	Uri fileToUpload;
 	String targetFilename;
@@ -78,6 +78,7 @@ public class FileUploadService extends IntentService {
 		Intent notificationIntent = new Intent(this, FriendicaImgUploadActivity.class);
 		Bundle b = new Bundle();
 		b.putParcelable(Intent.EXTRA_STREAM, fileToUpload);
+		b.putString(Intent.EXTRA_SUBJECT, subject);
 		b.putString(EXTRA_DESCTEXT, descText);
 		
 		notificationIntent.putExtras(b);
@@ -158,12 +159,12 @@ public class FileUploadService extends IntentService {
 		Bundle intentPara = intent.getExtras();
 		fileToUpload = (Uri) intentPara.getParcelable(Intent.EXTRA_STREAM);
 		descText = intentPara.getString(EXTRA_DESCTEXT);
+		subject = intentPara.getString(Intent.EXTRA_SUBJECT);
 		
 		if (targetFilename == null || targetFilename.equals("")) targetFilename = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date()) + ".txt";
 		
 		String fileSpec = Max.getRealPathFromURI(FileUploadService.this, fileToUpload);
 		
-
 		String tempFile = Max.IMG_CACHE_DIR + "/imgUploadTemp_" + System.currentTimeMillis() + ".jpg";
 		Max.resizeImage(fileSpec, tempFile, 1024,768);
 		
@@ -172,7 +173,8 @@ public class FileUploadService extends IntentService {
 			final TwAjax uploader = new TwAjax(FileUploadService.this, true, true);
 			uploader.addPostFile(new TwAjax.PostFile("media", targetFilename, tempFile));
 			uploader.addPostData("status", descText);
-			uploader.addPostData("source", "<a href='http://andfrnd.wikilab.de'>Friendica for Android</a>");
+			uploader.addPostData("title", subject);
+			uploader.addPostData("source", "<a href='http://friendica-for-android.wiki-lab.net'>Friendica for Android</a>");
 			uploader.uploadFile(Max.getServer(this)+"/api/statuses/update", null);
 			Log.i("Andfrnd/UploadFile", "after uploadFile");
 			Log.i("Andfrnd/UploadFile", "isSuccess() = " + uploader.isSuccess() );

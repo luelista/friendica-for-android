@@ -8,8 +8,11 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -32,7 +35,31 @@ public class PostDetailFragment extends ContentFragment {
 		reflvw = (PullToRefreshListView) myView.findViewById(R.id.listview);
 		list = reflvw.getRefreshableView();
 		
+		((Button) myView.findViewById(R.id.btn_upload)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sendComment();
+			}
+		});
+		
 		return myView;
+	}
+	
+	protected void sendComment() {
+		SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
+		final TwAjax t = new TwAjax(getActivity(), true, true);
+		t.addPostData("status", ((EditText) myView.findViewById(R.id.maintb)).getText().toString());
+		t.addPostData("source", "<a href='http://friendica-for-android.wiki-lab.net'>Friendica for Android</a>");
+		t.addPostData("in_reply_to_status_id", conversationId);
+		((Button) myView.findViewById(R.id.btn_upload)).setEnabled(false);
+		t.postData(Max.getServer(getActivity()) + "/api/statuses/update", new Runnable() {
+			@Override
+			public void run() {
+				((EditText) myView.findViewById(R.id.maintb)).setText("");
+				((Button) myView.findViewById(R.id.btn_upload)).setEnabled(true);
+				loadComments();
+			}
+		});
 	}
 
 	protected void onNavigate(String target) {

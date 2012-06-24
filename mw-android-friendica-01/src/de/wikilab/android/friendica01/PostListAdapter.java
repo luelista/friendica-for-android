@@ -1,14 +1,15 @@
 package de.wikilab.android.friendica01;
 
 import java.io.File;
-import java.sql.Date;
 import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -19,6 +20,7 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -29,9 +31,14 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 	private static final String TAG="Friendica/PostListAdapter";
 
 	public boolean isPostDetails = false;
+
+	interface OnUsernameClickListener {
+		void OnUsernameClick(ViewHolder viewHolder);
+	}
+	public OnUsernameClickListener onUsernameClick;
 	
-	protected static class ViewHolder {
-		int Type;
+	public static class ViewHolder {
+		int Type, position;
 		ImageView profileImage;
 		TextView userName, htmlContent, dateTime;
 		ImageView[] picture = new ImageView[3];
@@ -83,6 +90,24 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 		return 4;
 	}
 	
+	private void navigateUserProfile(int position) {
+		try {
+			Intent inte = new Intent(getContext(), UserProfileActivity.class);
+			inte.putExtra("userId", String.valueOf(((JSONObject) getItem(position)).getJSONObject("user").getInt("id")));
+			getContext().startActivity(inte);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private OnClickListener postPictureOnClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent inte = new Intent(Intent.ACTION_VIEW);
+			inte.setDataAndType(Uri.parse("file://" + v.getTag()), "image/jpeg");
+			getContext().startActivity(inte);
+		}
+	};
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -99,9 +124,10 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 				H.htmlContent = (TextView) convertView.findViewById(R.id.htmlContent);
 				H.profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
 				
-				H.picture[0] = (ImageView) convertView.findViewById(R.id.picture1);
-				H.picture[1] = (ImageView) convertView.findViewById(R.id.picture2);
-				H.picture[2] = (ImageView) convertView.findViewById(R.id.picture3);
+				H.picture[0] = (ImageView) convertView.findViewById(R.id.picture1); H.picture[0].setOnClickListener(postPictureOnClickListener);
+				H.picture[1] = (ImageView) convertView.findViewById(R.id.picture2); H.picture[1].setOnClickListener(postPictureOnClickListener);
+				H.picture[2] = (ImageView) convertView.findViewById(R.id.picture3); H.picture[2].setOnClickListener(postPictureOnClickListener);
+				
 			} else if (H.Type == 2) {
 				convertView = inf.inflate(R.layout.pl_listitem_comment, null);
 				H.userName = (TextView) convertView.findViewById(R.id.userName);
@@ -134,11 +160,23 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			}
 			
 			convertView.setTag(H);
+			
+			if (H.userName != null) {
+				OnClickListener clk = new OnClickListener() {
+					@Override public void onClick(View v) {
+						navigateUserProfile(H.position);
+					}
+				};
+				H.userName.setOnClickListener(clk);
+				H.profileImage.setOnClickListener(clk);
+			}
+			
 		} else {
 			H = (ViewHolder) convertView.getTag();
 		}
 		
 		JSONObject post = (JSONObject) getItem(position);
+		H.position = position;
 		
 		if (H.profileImage != null) {
 			H.profileImage.setImageResource(R.drawable.ic_launcher);
@@ -231,6 +269,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			Log.i(TAG, "TRY Downloading post Img: " + piurl);
 			final int targetImg = pos;
 			final File pifile = new File(Max.IMG_CACHE_DIR + "/pi_" + Max.cleanFilename(piurl));
+			H.picture[targetImg].setTag(pifile.getAbsolutePath());
 			if (pifile.isFile()) {
 				Log.i(TAG, "OK  Load cached post Img: " + piurl);
 				//profileImage.setImageURI(Uri.parse("file://" + pifile.getAbsolutePath()));

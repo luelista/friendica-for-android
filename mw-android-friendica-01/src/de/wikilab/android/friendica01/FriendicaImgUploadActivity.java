@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -87,7 +85,8 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
         
 		//TextView t = new TextView(UploadFile.this);
         //EditText txtFilename = (EditText) findViewById(R.id.txt_filename);
-        
+
+        EditText tSubject = (EditText) findViewById(R.id.subject);
         EditText t = (EditText) findViewById(R.id.maintb);
 		t.setText("File Uploader\n\nERR: Intent did not contain file!\n\nPress menu button for debug info !!!\n\n");
 
@@ -103,10 +102,10 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 				String fileSpec = Max.getRealPathFromURI(FriendicaImgUploadActivity.this, fileToUpload);
 				
 				ImageView gallerypic =((ImageView)findViewById(R.id.preview));
-				Drawable toRecycle= gallerypic.getDrawable();
+				/*Drawable toRecycle= gallerypic.getDrawable();
 				if (toRecycle != null) {
 				    ((BitmapDrawable)gallerypic.getDrawable()).getBitmap().recycle();
-				}
+				}*/
 				
 				//gallerypic.setImageURI(Uri.parse("file://"+fileSpec));
 				gallerypic.setImageBitmap(loadResizedBitmap(fileSpec, 500, 300, false));
@@ -121,6 +120,10 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 				if (callingIntent.hasExtra(FileUploadService.EXTRA_DESCTEXT)) {
 					t.setText(callingIntent.getStringExtra(FileUploadService.EXTRA_DESCTEXT));
 				}
+
+				if (callingIntent.hasExtra(Intent.EXTRA_SUBJECT)) {
+					tSubject.setText(callingIntent.getStringExtra(Intent.EXTRA_SUBJECT));
+				}
 				
 				uploadTextMode = false;
 				btn_upload.setEnabled(true);
@@ -131,6 +134,7 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 		btn_upload.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+				EditText txtSubject = (EditText) findViewById(R.id.subject);
 				EditText txtDesc = (EditText) findViewById(R.id.maintb);
 				
 				Intent uploadIntent = new Intent(getApplicationContext(), FileUploadService.class);
@@ -140,6 +144,7 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 				//b.putBoolean(FileUploadService.EXTRA_DELETE, deleteAfterUpload);
 				//b.putString(FileUploadService.EXTRA_FILENAME, txtFilename.getText().toString());
 				b.putString(FileUploadService.EXTRA_DESCTEXT, txtDesc.getText().toString());
+				b.putString(Intent.EXTRA_SUBJECT, txtSubject.getText().toString());
 				/*
 				if (uploadTextMode == true) {
 					try {
