@@ -145,7 +145,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 				H.profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
 			}
 			
-			if (isPostDetails) {
+			if (isPostDetails && H.Type != 3) {
 				if (H.Type <= 1) {
 					H.userName.setTextSize(18); H.htmlContent.setTextSize(18);
 				}
