@@ -8,6 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,18 +80,44 @@ public class MessageViewFragment extends ContentFragment {
 		list.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int position, long arg3) {
 				
-				Intent inte = new Intent(getActivity(), MessageDetailActivity.class);
-				try {
-					inte.putExtra("message-uri", ((JSONObject)getListAdapter().getItem(arg2 - 1)).getString("uri"));
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				new AlertDialog.Builder(getActivity())
+				.setTitle("Message actions...")
+				.setItems(new CharSequence[] {"View Details", "View Conversation", "Reply", "Delete"}, new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch(which) {
+						case 0:
+							try {
+								Intent inte = new Intent(getActivity(), MessageDetailActivity.class);
+								inte.putExtra("message-uri", ((JSONObject)getListAdapter().getItem(position - 1)).getString("uri"));
+								getActivity().startActivity(inte);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+							break;
+						case 1:
+						case 2:
+							try {
+								//show conv. view which contains reply box
+								Intent inte = new Intent(getActivity(), GenericContentActivity.class);
+								inte.putExtra("target", "msg:conversation:" + ((JSONObject)getListAdapter().getItem(position - 1)).getString("parent"));
+								getActivity().startActivity(inte);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+							break;
+						case 3:
+							//missing api
+							Toast.makeText(getActivity(), "Sorry, Friendica API doesn't support this yet...", Toast.LENGTH_LONG).show();
+							break;
+						}
+						dialog.dismiss();
+					}
+				})
+				.show();
 				
-				getActivity().startActivity(inte);
 				return true;
 			}
 			
@@ -95,22 +126,14 @@ public class MessageViewFragment extends ContentFragment {
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> self, View view, int position, long id) {
-				/*if (refreshTarget.equals("notifications")) {
-					SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
-					final Notification n = ((Notification.NotificationsListAdapter)getListAdapter()).getItem(position-1);
-					n.resolveTarget(getActivity(), new Runnable() {
-						@Override public void run() {
-							SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
-							if (n.targetComponent != null && n.targetComponent.equals("conversation:")) {
-								SendMessage("Navigate Conversation", String.valueOf(n.targetData), null);
-							} else {
-								Max.alert(getActivity(), "Unable to navigate to notification target<br><br><a href='" + n.targetUrl + "'>" + n.targetUrl + "</a>", "Not implemented");
-							}
-						}
-					});
-				} else {
-					SendMessage("Navigate Conversation", String.valueOf(id), null);
-				}*/
+				
+			}
+		});
+		
+		((Button) myView.findViewById(R.id.btn_upload)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sendReplyMessage();
 			}
 		});
 		
@@ -125,6 +148,17 @@ public class MessageViewFragment extends ContentFragment {
 		}
 	}
 	
+	protected void sendReplyMessage() {
+		if (refreshTarget == null ||!refreshTarget.startsWith("msg:conversation:")) return;
+		
+		String replyId = refreshTarget.substring(17);
+		
+		String message = ((EditText) myView.findViewById(R.id.maintb)).getText().toString();
+		
+		
+		
+	}
+	
 	protected void onNavigate(String target) {
 		if (curLoadPage == 1) reflvw.setRefreshing();
 		refreshTarget = target;
@@ -134,9 +168,11 @@ public class MessageViewFragment extends ContentFragment {
 		if (target != null && target.startsWith("msg:conversation:")) {
 			SendMessage("Set Header Text", "Loading...", null);
 			loadMessages(target.substring(17));
+			myView.findViewById(R.id.top_control_bar).setVisibility(View.GONE);
 		} else {
 			SendMessage("Set Header Text", getString(R.string.mm_directmessages), null);
 			loadMessages(null);
+			myView.findViewById(R.id.comment_box).setVisibility(View.GONE);
 		}
 	}
 	

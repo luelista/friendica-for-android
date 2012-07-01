@@ -14,11 +14,11 @@
         
 	    <LinearLayout android:paddingLeft="5dp" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
 	        <ImageView android:id="@+id/picture1" android:layout_width="200dp" android:layout_height="120dp" 
-	            android:background="#666666" android:padding="2dp" android:layout_marginRight="10dp" />
+	            android:background="@drawable/greyborder" android:layout_marginRight="10dp" />
 	        <ImageView android:id="@+id/picture2" android:layout_width="200dp" android:layout_height="120dp" 
-	            android:background="#666666" android:padding="2dp" android:layout_marginRight="10dp" />
+	            android:background="@drawable/greyborder" android:layout_marginRight="10dp" />
 	        <ImageView android:id="@+id/picture3" android:layout_width="200dp" android:layout_height="120dp" 
-	            android:background="#666666" android:padding="2dp" />
+	            android:background="@drawable/greyborder" />
 	    </LinearLayout>
     </LinearLayout>
     

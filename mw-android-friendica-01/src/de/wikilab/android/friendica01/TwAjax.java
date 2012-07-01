@@ -432,7 +432,7 @@ public class TwAjax extends Thread {
         HttpRequestBase m;
         if (myMethod == "POST") {
 	        m = new HttpPost(myUrl);
-	        ((HttpPost)m).setEntity(new UrlEncodedFormEntity(myPostData));
+	        ((HttpPost)m).setEntity(new UrlEncodedFormEntity(myPostData, "utf-8"));
         } else {
         	m = new HttpGet(myUrl);
         }

@@ -234,6 +234,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			//Max.setHtmlWithImages(H.htmlContent, post.getString("statusnet_html"));
 			String filtered_html = post.getString("statusnet_html");
 			filtered_html = filtered_html.replaceAll("(<br[^>]*>|</?div[^>]*>|</?p>)", "  ");
+			//filtered_html = filtered_html.replaceAll("<img[^>]+src=[\"']([^>\"']+)[\"'][^>]*>", "<a href='$1'>Bild: $1</a>");
 			Spanned spanned = Html.fromHtml(filtered_html);
 			Spannable htmlSpannable;
 			if (spanned instanceof SpannableStringBuilder) {
@@ -247,7 +248,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			
 			H.htmlContent.setText(htmlSpannable);
 			
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			H.htmlContent.setText("Invalid Dataset!");
 		}
 		
@@ -256,7 +257,7 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 	
 	private void downloadPics(final ViewHolder H, Spannable htmlSpannable) {
 		int pos = 0;
-		for (int i = 0; i < 2; i++) H.picture[i].setVisibility(View.GONE);
+		for (int i = 0; i <= 2; i++) H.picture[i].setVisibility(View.GONE);
 		
 		for (ImageSpan img : htmlSpannable.getSpans(0, htmlSpannable.length(), ImageSpan.class)) {
 			htmlSpannable.removeSpan(img);
@@ -272,16 +273,21 @@ public class PostListAdapter extends ArrayAdapter<JSONObject> {
 			H.picture[targetImg].setTag(pifile.getAbsolutePath());
 			if (pifile.isFile()) {
 				Log.i(TAG, "OK  Load cached post Img: " + piurl);
-				//profileImage.setImageURI(Uri.parse("file://" + pifile.getAbsolutePath()));
-				H.picture[targetImg].setImageDrawable(new BitmapDrawable(pifile.getAbsolutePath()));
-				H.picture[targetImg].setVisibility(View.VISIBLE);
+				BitmapDrawable bmp = new BitmapDrawable(pifile.getAbsolutePath());
+				if (bmp.getBitmap() != null && bmp.getBitmap().getWidth()>30) { //minWidth 30px to remove facebook's ugly icons
+					H.picture[targetImg].setImageDrawable(bmp);
+					H.picture[targetImg].setVisibility(View.VISIBLE);
+				}
 			} else {
 				pidl.urlDownloadToFile(piurl, pifile.getAbsolutePath(), new Runnable() {
 					@Override
 					public void run() {
 						Log.i(TAG, "OK  Download post Img: " + piurl);
-						H.picture[targetImg].setImageDrawable(new BitmapDrawable(pifile.getAbsolutePath()));
-						H.picture[targetImg].setVisibility(View.VISIBLE);
+						BitmapDrawable bmp = new BitmapDrawable(pifile.getAbsolutePath());
+						if (bmp.getBitmap() != null && bmp.getBitmap().getWidth()>30) { //minWidth 30px to remove facebook's ugly icons
+							H.picture[targetImg].setImageDrawable(bmp);
+							H.picture[targetImg].setVisibility(View.VISIBLE);
+						}
 					}
 				});
 			}

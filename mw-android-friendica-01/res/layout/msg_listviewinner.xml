@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#111111" >
+    
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:background="#444444" android:id="@+id/top_control_bar"
+        android:layout_alignParentTop="true">
+        
+        <Button 
+        android:id="@+id/btn_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write Message" />
+        
+    </LinearLayout>
+    
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#111111"
+    android:id="@+id/content_fragment"
+    android:layout_below="@+id/top_control_bar"
+    android:layout_above="@+id/comment_box" >
 
     <TextView
         android:id="@+id/lblInfo"
@@ -22,3 +41,31 @@
      />
 
 </FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/comment_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        
+        <EditText android:id="@+id/maintb"
+        android:layout_width="match_parent"
+        android:minHeight="60dp"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_toLeftOf="@+id/btn_upload" 
+        android:hint="Write a reply ..."
+        android:imeOptions="actionSend" />
+        
+        <Button android:id="@+id/btn_upload" android:text="Send"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_alignTop="@+id/maintb"
+        android:layout_alignBottom="@+id/maintb"
+        android:layout_alignParentRight="true"  />
+        
+    </RelativeLayout>
+    
+
+</RelativeLayout>
