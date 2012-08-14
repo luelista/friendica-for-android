@@ -83,6 +83,12 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 	}
 	
 	@Override
+	public void onResume() {
+		UpdateList();
+		super.onResume();
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		mainView = inflater.inflate(R.layout.mainmenu, container);
