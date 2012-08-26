@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -554,5 +557,14 @@ public class Max {
 	    ((TextView)ad.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 	
+	/*
+	 Return Throwable stacktrace as String
+	*/
+	public static String getStackTrace(Throwable aThrowable) { 
+		final Writer result = new StringWriter(); 
+		final PrintWriter printWriter = new PrintWriter(result); 
+		aThrowable.printStackTrace(printWriter); 
+		return result.toString(); 
+	}
 
 }
