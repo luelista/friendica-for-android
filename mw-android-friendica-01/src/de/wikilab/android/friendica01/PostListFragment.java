@@ -1,3 +1,4 @@
+
 package de.wikilab.android.friendica01;
 
 import java.util.ArrayList;
@@ -176,7 +177,7 @@ public class PostListFragment extends ContentFragment {
 	}
 	
 	private void setItems(JSONArray j) throws JSONException {
-		if (curLoadPage == 1) {
+		if (curLoadPage == 1 || getPostListAdapter() == null) {
 			ArrayList<JSONObject> jsonObjectArray = new ArrayList<JSONObject>(j.length());
 			containedIds.clear();
 			for(int i = 0; i < j.length(); i++) {
@@ -202,7 +203,13 @@ public class PostListFragment extends ContentFragment {
 	
 	public void loadTimeline() {
 		final TwAjax t = new TwAjax(getActivity(), true, true);
-		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/home_timeline.json?count=" + String.valueOf(ITEMS_PER_PAGE) + "&page=" + String.valueOf(curLoadPage), new Runnable() {
+		int ipp = ITEMS_PER_PAGE;
+		int cp = curLoadPage;
+		if (getPostListAdapter() == null) {
+			ipp = ITEMS_PER_PAGE * curLoadPage;
+			cp = 1;
+		}
+		t.getUrlContent(Max.getServer(getActivity()) + "/api/statuses/home_timeline.json?count=" + String.valueOf(ipp) + "&page=" + String.valueOf(cp), new Runnable() {
 			@Override public void run() {
 				try {
 					JSONArray j = (JSONArray) t.getJsonResult();
@@ -210,7 +217,15 @@ public class PostListFragment extends ContentFragment {
 					setItems(j);
 					
 				} catch (Exception e) {
-					if (list != null) list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), t.getResult() == null ? "RESULT IS NULL! " : Max.Hexdump(t.getResult().getBytes())}));
+					list.setAdapter(new ArrayAdapter<String>(
+						getActivity(), R.layout.pl_error_listitem, android.R.id.text1, 
+							new String[]{
+								t.getURL(),
+								"Error: "+ e.getMessage(), 
+								Max.getStackTrace(e), 
+								Max.Hexdump(t.getResult().getBytes())
+							}
+					));
 					e.printStackTrace();
 				}
 				hideProgBar();
