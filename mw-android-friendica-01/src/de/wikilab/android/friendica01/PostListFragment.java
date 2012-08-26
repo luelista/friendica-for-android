@@ -18,6 +18,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class PostListFragment extends ContentFragment {
 	
 	PullToRefreshListView reflvw;
 	ListView list;
+	ListAdapter ad;
 	
 	String refreshTarget;
 	
@@ -47,6 +49,7 @@ public class PostListFragment extends ContentFragment {
 		reflvw = (PullToRefreshListView) myView.findViewById(R.id.listview);
 		list = reflvw.getRefreshableView();
 		
+		Log.d(TAG,  "==> onCreateView ");
 		
 		reflvw.setOnRefreshListener(new OnRefreshListener() {
 		    @Override
@@ -92,6 +95,15 @@ public class PostListFragment extends ContentFragment {
 				}
 			}
 		});
+
+		if (ad != null && getPostListAdapter() == null) {
+			//navigate(refreshTarget);
+			list.setAdapter(ad);
+		}
+		
+		if (savedInstanceState != null && savedInstanceState.containsKey("listviewState")) {
+			list.onRestoreInstanceState(savedInstanceState.getParcelable("listviewState"));
+		}
 		
 		return myView;
 	}
@@ -99,9 +111,21 @@ public class PostListFragment extends ContentFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (refreshTarget != null && loadFinished) {
-			navigate(refreshTarget);
-		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("listviewState", list.onSaveInstanceState());
+		super.onSaveInstanceState(outState);
+	}
+	
+	
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		Log.d(TAG,  "==> onStart ");
 	}
 	
 	protected void onNavigate(String target) {
@@ -160,7 +184,8 @@ public class PostListFragment extends ContentFragment {
 				jsonObjectArray.add(jj);
 				containedIds.add(jj.getLong("id"));
 			}
-			list.setAdapter(new PostListAdapter(getActivity(), jsonObjectArray));
+			ad = new PostListAdapter(getActivity(), jsonObjectArray);
+			list.setAdapter(ad);
 		} else {
 			PostListAdapter oldContent = getPostListAdapter();
 			for(int i = 0; i < j.length(); i++) {
@@ -185,7 +210,7 @@ public class PostListFragment extends ContentFragment {
 					setItems(j);
 					
 				} catch (Exception e) {
-					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
+					if (list != null) list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), t.getResult() == null ? "RESULT IS NULL! " : Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
 				hideProgBar();
@@ -207,7 +232,7 @@ public class PostListFragment extends ContentFragment {
 					setItems(j);
 					
 				} catch (Exception e) {
-					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
+					if (list != null)list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
 				hideProgBar();
@@ -234,11 +259,11 @@ public class PostListFragment extends ContentFragment {
 					}
 					
 					//ListView lvw = (ListView) findViewById(R.id.listview);
-					
-					list.setAdapter(new Notification.NotificationsListAdapter(getActivity(), notifs));
+					ad = new Notification.NotificationsListAdapter(getActivity(), notifs);
+					list.setAdapter(ad);
 					
 				} catch (Exception e) {
-					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
+					if (list != null) list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 					e.printStackTrace();
 				}
 				hideProgBar();

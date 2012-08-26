@@ -55,6 +55,11 @@ public class Notification {
 			@Override public void run() {
 				
 				targetUrl = resT.fetchHeaderResult[0].getValue();
+				
+				if (targetUrl.endsWith("/message/")) {
+					targetComponent = "msg:all";
+				}
+				
 				Matcher m = Max.regeximatch(".*/display/.*/([0-9]+)/?", targetUrl);
 				if (m.matches()) {
 					targetComponent = "conversation:"; targetData = m.group(1);

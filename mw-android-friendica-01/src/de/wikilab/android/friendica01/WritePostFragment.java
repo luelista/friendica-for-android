@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class WritePostFragment extends Fragment {
+public class WritePostFragment extends ContentFragment {
 	private static final String TAG="Friendica/WritePostFragment";
 	
 
@@ -176,6 +176,12 @@ public class WritePostFragment extends Fragment {
 				((FragmentParentListener)getActivity()).OnFragmentMessage("Finished", null, null);
 			}
 		});
+	}
+
+	@Override
+	protected void onNavigate(String target) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

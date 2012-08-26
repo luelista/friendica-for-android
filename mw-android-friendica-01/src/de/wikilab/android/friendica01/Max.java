@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -66,6 +67,16 @@ public class Max {
 		new File(DATA_DIR).mkdirs();
 		new File(IMG_CACHE_DIR).mkdirs();
 		
+	}
+	
+	public static boolean isLarge(Configuration c) {
+		return (
+				((c.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 
+				Configuration.SCREENLAYOUT_SIZE_LARGE) 
+				||
+				((c.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 
+						Configuration.SCREENLAYOUT_SIZE_XLARGE)
+			    );
 	}
 	
     public static String Hexdump(byte[] data) {
@@ -158,11 +169,13 @@ public class Max {
 	 * @param errmes
 	 */
 	public static void tryLogin(final Activity ctx) {
+		
 		final ProgressDialog pd = new ProgressDialog(ctx);
 		pd.setMessage("Logging in...");
 		pd.show();		
 
 		String server = Max.getServer(ctx);
+		Log.i(TAG, "tryLogin on server "+server);
 		
 		final TwAjax t = new TwAjax(ctx, true, true);
 		t.getUrlContent(server+"/api/account/verify_credentials", new Runnable() {
@@ -171,6 +184,7 @@ public class Max {
 				pd.dismiss();
 				try {
 					if (t.isSuccess()) {
+						Log.i(TAG, "... tryLogin - http status: "+t.getHttpCode());
 						if (t.getHttpCode() == 200) {
 							JSONObject r = (JSONObject) t.getJsonResult();
 							String name = r.getString("name");
@@ -195,11 +209,13 @@ public class Max {
 							showLoginForm(ctx, "Error:"+t.getResult());
 						}
 					} else {
-						
+						Log.w(TAG, "... tryLogin - request failed");
 						showLoginForm(ctx, "ERR:"+t.getError().toString());
 					}
 					
 				} catch(Exception ex) {
+					Log.w(TAG, "... tryLogin - exception:");
+					ex.printStackTrace();
 					showLoginForm(ctx, "ERR2:"+t.getResult()+ex.toString());
 					
 				}
@@ -213,6 +229,7 @@ public class Max {
 	 * @param errmes
 	 */
 	public static void showLoginForm(final Activity ctx, String errmes) {
+		Log.v(TAG, "... showLoginForm");
 		View myView = ctx.getLayoutInflater().inflate(R.layout.loginscreen, null, false);
 		final AlertDialog alert = new AlertDialog.Builder(ctx)
 		.setTitle("Login to Friendica")

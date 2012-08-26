@@ -1,5 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
-<include xmlns:android="http://schemas.android.com/apk/res/android"
-    layout="@layout/homeactivity_large"/>
-</merge>
+<!--
+					*********************************************
+					*******  T A B L E T   L A Y O U T           for HomeActivity
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <!-- links -->
+
+    <LinearLayout
+        android:id="@+id/left_bar"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/subheader_gradient"
+            android:orientation="horizontal"
+            android:paddingBottom="5dip"
+            android:paddingLeft="10dip"
+            android:paddingTop="5dip" >
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:src="@drawable/ic_menu_archive" >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/selected_clipboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/loading_data"
+                android:textColor="#fff" 
+                android:maxLines="2">
+            </TextView>
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/menu_fragment"
+            android:name="de.wikilab.android.friendica01.MainMenuFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </fragment>
+    </LinearLayout>
+
+    <!-- rechts -->
+
+    <LinearLayout
+        android:id="@+id/right_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header_gradient"
+            android:orientation="horizontal" >
+            
+            <Button
+                android:id="@+id/toggle_left_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&lt;-&gt;"/>
+                
+            <!-- lol.... http://stackoverflow.com/questions/5028588/setting-layout-attribute-for-include -->
+            <include layout="@layout/header_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/toggle_left_bar" />
+
+            <TextView
+                android:id="@+id/header_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/header_logo"
+                android:layout_toRightOf="@id/header_logo"
+                android:text="@string/hello"
+                android:textColor="#000" 
+                android:maxLines="1">
+            </TextView>
+			
+            <include layout="@layout/glob_searchbox"/>
+            
+            <ProgressBar android:id="@+id/glob_progressbar" android:layout_width="40dp" android:layout_height="40dp" android:layout_alignParentRight="true"
+                android:indeterminate="true" android:layout_centerVertical="true" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:visibility="invisible" />
+            
+            <!--
+            <ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_paste" android:layout_toLeftOf="@+id/btn_upload_sdcard" android:layout_width="wrap_content" android:src="@drawable/clipboard_paste"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_sdcard" android:layout_toLeftOf="@+id/btn_upload_photo" android:layout_width="wrap_content" android:src="@drawable/sdcard"></ImageButton>
+						<ImageButton android:layout_height="wrap_content" android:id="@+id/btn_upload_photo" android:layout_alignParentRight="true"  android:layout_width="wrap_content" android:src="@drawable/photo"></ImageButton>
+            -->
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/view_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minWidth="500dp" >
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -36,4 +36,8 @@ public abstract class ContentFragment extends Fragment {
 		((FragmentParentListener)getActivity()).OnFragmentMessage(message, arg1, arg2);
 	}
 	
+	public boolean onBackPressed() {
+		return false;
+	}
+	
 }

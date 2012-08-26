@@ -134,7 +134,7 @@ public class PostDetailFragment extends ContentFragment {
 					
 				} catch (Exception e) {
 					e.printStackTrace();
-					list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
+					if (list != null) list.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.pl_error_listitem, android.R.id.text1, new String[]{"Error: "+ e.getMessage(), Max.Hexdump(t.getResult().getBytes())}));
 				}
 				hideProgBar();
 			}
