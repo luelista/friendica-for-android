@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android" android:title="TeamWiki Einstellungen">
+  xmlns:android="http://schemas.android.com/apk/res/android" android:title="Friendica Preferences">
     
-    <PreferenceCategory android:title="Notifications (coming soon)" android:key="s3">
-        <CheckBoxPreference android:summary="May drain battery" android:title="Enable Notifications" android:key="notification_enable"></CheckBoxPreference>
-        <ListPreference android:title="Check Interval" android:key="notification_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" />
+    <PreferenceCategory android:title="Notifications" android:key="s3">
+        <CheckBoxPreference android:summary="Google Cloud Messaging" android:title="Enable Push Notifications" android:key="notification_pushenable"></CheckBoxPreference>
+        <CheckBoxPreference android:summary="May drain battery" android:title="Enable Pull Notifications" android:key="notification_pullenable"></CheckBoxPreference>
+        <ListPreference android:title="Check Interval" android:key="notification_pull_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" android:dependency="notification_pullenable" />
+        <Preference android:title="Re-register Push Service" android:key="notification_pushreregister" android:dependency="notification_pushenable" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Update Check" android:key="s6">

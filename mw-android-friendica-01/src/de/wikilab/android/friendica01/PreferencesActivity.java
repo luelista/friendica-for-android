@@ -15,10 +15,13 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+
+import com.google.android.gcm.GCMRegistrar;
 
 public class PreferencesActivity  extends PreferenceActivity implements OnSharedPreferenceChangeListener  {
 	private static final String TAG="Friendica/PreferencesActivity";
@@ -55,21 +58,46 @@ public class PreferencesActivity  extends PreferenceActivity implements OnShared
 				return true;
 			}
         });
+
+        final CheckBoxPreference p_notifPull = (CheckBoxPreference) findPreference("notification_pullenable");
+        final CheckBoxPreference p_notifPush = (CheckBoxPreference) findPreference("notification_pushenable");
         
-        CheckBoxPreference p_notif = (CheckBoxPreference) findPreference("notification_enable");
-        p_notif.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        p_notifPull.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				restartTimer();
+				restartTimer(newValue.equals(true));
+				if (newValue.equals(true)) p_notifPush.setChecked(false);
 				return true;
 			}
 		});
+        
+        
+        p_notifPush.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (newValue.equals(true)) {
+					GCMRegistrar.register(PreferencesActivity.this, HomeActivity.SENDER_ID);
+					p_notifPull.setChecked(false);
+				} else {
+					GCMRegistrar.unregister(PreferencesActivity.this);
+				}
+				return true;
+			}
+		});
+        
+        Preference p_notifReregister = findPreference("notification_pushreregister");
+        p_notifReregister.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	@Override
+        	public boolean onPreferenceClick(Preference preference) {
+				GCMRegistrar.register(PreferencesActivity.this, HomeActivity.SENDER_ID);
+        		return true;
+        	}
+		});
     }
 
-    private void restartTimer() {
+    private void restartTimer(boolean runMode) {
     	Max.cancelTimer(this);
-    	CheckBoxPreference p2 = (CheckBoxPreference) findPreference("notification_enable");
-        if (p2.isChecked()) {
+        if (runMode) {
         	Max.runTimer(this);
         }
     }

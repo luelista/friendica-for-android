@@ -223,7 +223,7 @@ public class PostListFragment extends ContentFragment {
 								t.getURL(),
 								"Error: "+ e.getMessage(), 
 								Max.getStackTrace(e), 
-								Max.Hexdump(t.getResult().getBytes())
+								t.getResult() == null ? "---" : Max.Hexdump(t.getResult().getBytes())
 							}
 					));
 					e.printStackTrace();

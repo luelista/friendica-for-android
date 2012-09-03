@@ -3,6 +3,7 @@ package de.wikilab.android.friendica01;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 public class NotificationCheckerService extends Service {
@@ -18,6 +19,7 @@ public class NotificationCheckerService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		
+		Log.e(TAG, "Friendica timer fired");
 		Toast.makeText(this, "Friendica timer fired", Toast.LENGTH_LONG).show();
 		
 		return super.onStartCommand(intent, flags, startId);

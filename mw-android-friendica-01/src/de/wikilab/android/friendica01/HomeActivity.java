@@ -13,18 +13,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.gcm.GCMRegistrar;
 
 public class HomeActivity extends FragmentActivity implements FragmentParentListener, LoginListener {
 	private static final String TAG="Friendica/HomeActivity";
 
+	public final static String SENDER_ID = "179387721673";
 
 	public static final int RQ_SELECT_PHOTO = 44;
 	public static final int RQ_TAKE_PHOTO = 55;
@@ -42,7 +45,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	PostDetailFragment frag_postdetail = new PostDetailFragment();
 	MessageViewFragment frag_messages = new MessageViewFragment();
 	//PreferenceFragment frag_preferences = new PreferenceFragment();
-*/
+	 */
 	
 	String currentMMItem = null;
 
@@ -55,28 +58,39 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 
 		Max.initDataDirs();
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String userName = prefs.getString("login_user", null);
-		if (userName == null || userName.length() < 1) {
-			Max.showLoginForm(this, "Please enter account data");
-		} else {
-			Max.tryLogin(this);
-		}
-
 		Log.d(TAG, "screenLayout="+getResources().getConfiguration().screenLayout);
 		if (Max.isLarge(getResources().getConfiguration())) {
 			// on a large screen device ...
 			isLargeMode = true;
 		}
 	
-		if (savedInstanceState == null) {
-			navigate("Timeline");
-			
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String userName = prefs.getString("login_user", null);
+		if (userName == null || userName.length() < 1) {
+			Max.showLoginForm(this, "Please enter account data");
 		} else {
-			currentMMItem = savedInstanceState.getString("currentMMItem");
-			if (currentMMItem != null) navigate(currentMMItem);
+			Max.tryLogin(this);
+			
+			if (savedInstanceState == null) {
+				navigate("Timeline");
+			} else {
+				currentMMItem = savedInstanceState.getString("currentMMItem");
+				if (currentMMItem != null) navigate(currentMMItem);
+			}
+			
+			GCMRegistrar.checkDevice(this);
+			GCMRegistrar.checkManifest(this);
+			final String regId = GCMRegistrar.getRegistrationId(this);
+			if (regId.equals("")) {
+			  Log.v(TAG, "Registering for GCM");
+			  GCMRegistrar.register(this, SENDER_ID);
+			} else {
+			  Log.v(TAG, "Already registered");
+			}
+			
 		}
 
+	
 		View toggle = findViewById(R.id.toggle_left_bar);
 		if (toggle != null) toggle.setOnClickListener(toggleMenuBarHandler);
 		//toggle = findViewById(R.id.toggle_left_bar2);
@@ -119,10 +133,14 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	OnClickListener toggleMenuBarHandler = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			View leftBar = findViewById(R.id.left_bar);
-			setMenuBarVisible(leftBar.getVisibility() == View.GONE);
+			toggleMenuBarVisible();
 		}
 	};
+	
+	protected void toggleMenuBarVisible() {
+		View leftBar = findViewById(R.id.left_bar);
+		setMenuBarVisible(leftBar.getVisibility() == View.GONE);
+	}
 	
 	protected void setMenuBarVisible(boolean v) {
 		View leftBar = findViewById(R.id.left_bar);
@@ -373,4 +391,14 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		super.onBackPressed();
 	}
 
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			toggleMenuBarVisible();
+			return false;
+		} else {
+			return super.onKeyUp(keyCode, event);
+		}
+	}
+	
 }
