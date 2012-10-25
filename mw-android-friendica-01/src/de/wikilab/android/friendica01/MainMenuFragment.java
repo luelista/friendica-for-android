@@ -45,22 +45,24 @@ public class MainMenuFragment extends Fragment implements LoginListener {
 				
 				try {
 					appendNumber(listWithNotifications, 0, xd.getElementsByTagName("net").item(0).getTextContent());
-				} catch (Exception ingoreException) {}
+				//} catch (Exception ingoreException) {}
 				
-				try {
+				//try {
 					appendNumber(listWithNotifications, 4, xd.getElementsByTagName("intro").item(0).getTextContent() + " intros");
-				} catch (Exception ingoreException) {}
+				//} catch (Exception ingoreException) {}
 				
-				try {
+				//try {
 					appendNumber(listWithNotifications, 2, xd.getElementsByTagName("home").item(0).getTextContent());
-				} catch (Exception ingoreException) {}
+				//} catch (Exception ingoreException) {}
 				
-				try {
+				//try {
 					appendNumber(listWithNotifications, 1, xd.getElementsByTagName("notif").item(0).getAttributes().getNamedItem("count").getNodeValue());
-				} catch (Exception ingoreException) {}
+				//} catch (Exception ingoreException) {}
 				
-				lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, listWithNotifications));
-				if (selectedItemIndex>-1)((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(selectedItemIndex);
+				//try {
+					lvw.setAdapter(new HtmlStringArrayAdapter(getActivity(), R.layout.mainmenuitem, android.R.id.text1, listWithNotifications));
+					if (selectedItemIndex>-1)((HtmlStringArrayAdapter)lvw.getAdapter()).setSelectedItemIndex(selectedItemIndex);
+				} catch (Exception ignoreException) {}
 			}
 		});
 		//lvw.setAdapter(new HtmlStringArrayAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, MainList));

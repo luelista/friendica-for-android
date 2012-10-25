@@ -20,7 +20,8 @@
     - https support
     - Take Photo And Upload
     ...
-    - beta implementation of profile pages	3.0
+    - beta implementation of profile pages
+	3.0
 	- continuous loading
 	- separate view for picture posts
 	- beta implementation of post details pages
@@ -113,7 +114,8 @@
             android:name=".GenericContentActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".PhotoGalleryActivity"

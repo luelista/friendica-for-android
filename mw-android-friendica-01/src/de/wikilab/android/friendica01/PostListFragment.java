@@ -44,6 +44,12 @@ public class PostListFragment extends ContentFragment {
 	
 	HashSet<Long> containedIds = new HashSet<Long>();
 	
+	/*@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    setRetainInstance(true);
+	}*/
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		myView = inflater.inflate(R.layout.pl_listviewinner, container, false);
@@ -158,9 +164,11 @@ public class PostListFragment extends ContentFragment {
 		/*reflvw.setAddStatesFromChildren(addsStates)
 		list.setVisibility(View.VISIBLE);
 		progbar.setVisibility(View.GONE);*/
-		if (curLoadPage == 1) reflvw.onRefreshComplete();
+		try{
+			if (curLoadPage == 1) reflvw.onRefreshComplete();
 
-		SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
+			SendMessage("Loading Animation", Integer.valueOf(View.INVISIBLE), null);
+		} catch(Exception ignoreException) {}
 		
 	}
 
@@ -217,16 +225,18 @@ public class PostListFragment extends ContentFragment {
 					setItems(j);
 					
 				} catch (Exception e) {
-					list.setAdapter(new ArrayAdapter<String>(
-						getActivity(), R.layout.pl_error_listitem, android.R.id.text1, 
-							new String[]{
-								t.getURL(),
-								"Error: "+ e.getMessage(), 
-								Max.getStackTrace(e), 
-								t.getResult() == null ? "---" : Max.Hexdump(t.getResult().getBytes())
-							}
-					));
-					e.printStackTrace();
+					try{
+  					list.setAdapter(new ArrayAdapter<String>(
+  						getActivity(), R.layout.pl_error_listitem, android.R.id.text1, 
+  							new String[]{
+  								t.getURL(),
+  								"Error: "+ e.getMessage(), 
+  								Max.getStackTrace(e), 
+  								t.getResult() == null ? "---" : Max.Hexdump(t.getResult().getBytes())
+  							}
+  					));
+  					e.printStackTrace();
+					} catch(Exception ignoreException) {}
 				}
 				hideProgBar();
 			}
