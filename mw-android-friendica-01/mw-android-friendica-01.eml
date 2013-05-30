@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="Android 2.3.3 Platform" jdk_type="Android SDK">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="android-support-v4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/mw-android-friendica-01/libs/android-support-v4.jar!/"/>
+	</lib>
+	<levels>
+		<level name="gcm" value="project"/>
+	</levels>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gcm">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mw-android-friendica-01/libs/gcm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

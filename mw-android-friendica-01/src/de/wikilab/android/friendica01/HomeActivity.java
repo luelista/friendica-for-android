@@ -79,17 +79,23 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 				currentMMItem = savedInstanceState.getString("currentMMItem");
 				if (currentMMItem != null) navigate(currentMMItem);
 			}
-			
-			GCMRegistrar.checkDevice(this);
-			GCMRegistrar.checkManifest(this);
-			final String regId = GCMRegistrar.getRegistrationId(this);
-			if (regId.equals("")) {
-			  Log.v(TAG, "Registering for GCM");
-			  GCMRegistrar.register(this, SENDER_ID);
-			} else {
-			  Log.v(TAG, "Already registered");
-			}
-			
+			try {
+                GCMRegistrar.checkDevice(this);
+                GCMRegistrar.checkManifest(this);
+                final String regId = GCMRegistrar.getRegistrationId(this);
+                if (regId.equals("")) {
+                  Log.v(TAG, "Registering for GCM");
+                  GCMRegistrar.register(this, SENDER_ID);
+                } else {
+                  Log.v(TAG, "Already registered");
+                }
+
+            } catch(Exception e) {
+                Log.e(TAG, "Google Cloud Messaging not supported - please install Google Apps package!");
+                Log.e(TAG, e.toString());
+                Log.e(TAG, "Continuing without GCM. Push notifications won't work.");
+
+            }
 		}
 
 	
@@ -117,7 +123,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 							int currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0 ).versionCode;
 							Log.i(TAG, "UpdateCheck onlineVersion="+version+" currentVersion="+currentVersion);
 							if (version > currentVersion) {
-								Max.alert(HomeActivity.this, "Open the app's website to download the newest version:<br><a href='https://github.com/max-weller/friendica-for-android/downloads'>https://github.com/max-weller/friendica-for-android/downloads</a><br><br>(Go to Preferences to disable update check)", "Update available!");
+								Max.alert(HomeActivity.this, "<a href='http://friendica-for-android.wiki-lab.net/update-landing/'>Click here to load the update!</a><br><br>(Go to Preferences to disable update check)", "Update available!");
 							}
 						} catch (NameNotFoundException e) {
 							e.printStackTrace();
