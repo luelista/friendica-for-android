@@ -280,10 +280,7 @@ public class Max {
 				SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
 				prefs.putString("login_protocol", selProtocol.getSelectedItem().toString());
 				String server = edtServer.getText().toString();
-				if (server.startsWith("https://"))
-					server = server.substring(server.indexOf("https://"));
-				else if (server.startsWith("http://"))
-					server = server.substring(server.indexOf("http://"));
+                server = server.replaceAll("^https?://", "");
 				prefs.putString("login_server", server);
 				prefs.putString("login_user", edtUser.getText().toString());
 				prefs.putString("login_password", edtPassword.getText().toString());

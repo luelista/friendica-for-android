@@ -2,6 +2,6 @@
 
 package de.wikilab.android.friendica01;
 
-/* This stub is only used by the IDE. It is NOT the R class actually packed into the APK */
+/* This stub is for using by IDE only. It is NOT the R class actually packed into APK */
 public final class R {
 }
