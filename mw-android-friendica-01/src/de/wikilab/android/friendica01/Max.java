@@ -248,7 +248,7 @@ public class Max {
 		.show();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		String protocol = prefs.getString("login_protocol", null);
+		String protocol = prefs.getString("login_protocol", "https");
 		String server = prefs.getString("login_server", null);
 		String userName = prefs.getString("login_user", null);
 		
@@ -257,7 +257,7 @@ public class Max {
 		}
 		
 		final Spinner selProtocol = (Spinner)myView.findViewById(R.id.selProtocol);
-		selProtocol.setSelection(selProtocol.equals("https") ? 1 : 0);            //HACK !!!
+		selProtocol.setSelection(protocol.equals("https") ? 1 : 0);            //HACK !!!
 		
 		final EditText edtServer = (EditText)myView.findViewById(R.id.edtServer);
 		edtServer.setText(server);
@@ -279,7 +279,12 @@ public class Max {
 			public void onClick(View v) {
 				SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
 				prefs.putString("login_protocol", selProtocol.getSelectedItem().toString());
-				prefs.putString("login_server", edtServer.getText().toString());
+				String server = edtServer.getText().toString();
+				if (server.startsWith("https://"))
+					server = server.substring(server.indexOf("https://"));
+				else if (server.startsWith("http://"))
+					server = server.substring(server.indexOf("http://"));
+				prefs.putString("login_server", server);
 				prefs.putString("login_user", edtUser.getText().toString());
 				prefs.putString("login_password", edtPassword.getText().toString());
 				prefs.commit();
