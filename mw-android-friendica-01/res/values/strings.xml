@@ -41,6 +41,28 @@
 	<string name="mm_preferences">Preferences</string>
 	<string name="mm_logout">Log Out</string>
 	
+	<string name="prefs_notifications">Notifications</string>
+	<string name="prefs_enable_push_notifications">Enable Push Notifications</string>
+	<string name="prefs_enable_pull_notifications">Enable Pull Notifications></string>
+	<string name="prefs_check_interval">Check Interval</string>
+	<string name="prefs_reregister_push_service">Re-register Push Service</string>
+	<string name="prefs_update_check">Update Check</string>
+	<string name="prefs_check_updates">Check For Updates</string>
+	<string name="prefs_ssl">SSL</string>
+	<string name="prefs_disable_cert_checks">Disable All Certificate Checks</string>
+	<string name="prefs_network">Network</string>
+	<string name="prefs_proxy_settings">Proxy Settings...</string>
+	<string name="prefs_global_settings">Global Settings</string>
+	<string name="prefs_system_proxy_settings">System Proxy Settings...</string>
+	<string name="prefs_override_global_settings">Override Global Settings</string>
+	<string name="prefs_host">Host</string>
+	<string name="prefs_port">Port</string>
+	<string name="prefs_proxy_auth">Proxy Authentication</string>
+	<string name="prefs_google_cloud_msg">Google Cloud Messaging</string>
+	<string name="prefs_drain_battery">May drain battery</string>
+	<string name="prefs_testing_only">For Test Only (Unsafe!)</string>
+	
+		
     <string name="fake_data_notice">NOTE: As Friendica\&apos;s API doesn\&apos;t support photo albums at the moment, only example photos from my Panoramio profile are shown. <i>(tap to close)</i></string>
     
     <string-array name="notification_intervals">

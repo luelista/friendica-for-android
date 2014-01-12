@@ -41,6 +41,27 @@
 	<string name="mm_preferences">Einstellungen</string>
 	<string name="mm_logout">Ausloggen</string>
 	
+	<string name="prefs_notifications">Benachrichtigungen</string>
+	<string name="prefs_enable_push_notifications">Push Benachrichtigungen aktivieren</string>
+	<string name="prefs_enable_pull_notifications">Pull Benachrichtigungen aktivieren</string>
+	<string name="prefs_check_interval">Check Intervall</string>
+	<string name="prefs_reregister_push_service">Push Dienst erneut registrieren</string>
+	<string name="prefs_update_check">Neue Version</string>
+	<string name="prefs_check_updates">Auf neue Version prüfen</string>
+	<string name="prefs_ssl">SSL</string>
+	<string name="prefs_disable_cert_checks">Zertifikatsüberprüfung deaktivieren</string>
+	<string name="prefs_network">Netzwerk</string>
+	<string name="prefs_proxy_settings">Proxy Einstellungen...</string>
+	<string name="prefs_global_settings">Global Einstellungen</string>
+	<string name="prefs_system_proxy_settings">System Proxy Einstellungen...</string>
+	<string name="prefs_override_global_settings">Globale Einstellungen übeschreiben</string>
+	<string name="prefs_host">Host</string>
+	<string name="prefs_port">Port</string>
+	<string name="prefs_proxy_auth">Proxy Authentifizierung</string>
+	<string name="prefs_google_cloud_msg">Google Cloud Messaging</string>
+	<string name="prefs_drain_battery">Höherer Batterieverbrauch</string>
+	<string name="prefs_testing_only">Nur für Tests verwenden (Unsicher!)</string>
+	
     <string name="fake_data_notice">HINWEIS: Da Friendica\&apos;s API momentan keine Photoalben unterstützt, sind hier lediglich Beispielphotos zu sehen. <i>(Antippen zum schliessen)</i></string>
     
     <string-array name="notification_intervals">

@@ -2,37 +2,37 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android" android:title="Friendica Preferences">
     
-    <PreferenceCategory android:title="Notifications" android:key="s3">
-        <CheckBoxPreference android:summary="Google Cloud Messaging" android:title="Enable Push Notifications" android:key="notification_pushenable"></CheckBoxPreference>
-        <CheckBoxPreference android:summary="May drain battery" android:title="Enable Pull Notifications" android:key="notification_pullenable"></CheckBoxPreference>
-        <ListPreference android:title="Check Interval" android:key="notification_pull_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" android:dependency="notification_pullenable" />
-        <Preference android:title="Re-register Push Service" android:key="notification_pushreregister" android:dependency="notification_pushenable" />
+    <PreferenceCategory android:title="@string/prefs_notifications" android:key="s3">
+        <CheckBoxPreference android:summary="@string/prefs_google_cloud_msg" android:title="@string/prefs_enable_push_notifications" android:key="notification_pushenable"></CheckBoxPreference>
+        <CheckBoxPreference android:summary="@string/prefs_drain_battery" android:title="@string/prefs_enable_pull_notifications" android:key="notification_pullenable"></CheckBoxPreference>
+        <ListPreference android:title="@string/prefs_check_interval" android:key="notification_pull_check_interval" android:entries="@array/notification_intervals" android:entryValues="@array/notification_interval_values" android:dependency="notification_pullenable" />
+        <Preference android:title="@string/prefs_reregister_push_service" android:key="notification_pushreregister" android:dependency="notification_pushenable" />
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Update Check" android:key="s6">
-        <CheckBoxPreference android:summary="" android:title="Check For Updates" android:key="updateChecker" android:defaultValue="true"></CheckBoxPreference>
+    <PreferenceCategory android:title="@string/prefs_update_check" android:key="s6">
+        <CheckBoxPreference android:summary="" android:title="@string/prefs_check_updates" android:key="updateChecker" android:defaultValue="true"></CheckBoxPreference>
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="SSL" android:key="s6">
-        <CheckBoxPreference android:summary="For Test Only (Unsafe!)" android:title="Disable All Certificate Checks" android:key="ssl_unsafe" android:defaultValue="false"></CheckBoxPreference>
+    <PreferenceCategory android:title="@string/prefs_ssl" android:key="s6">
+        <CheckBoxPreference android:summary="@string/prefs_testing_only" android:title="@string/prefs_disable_cert_checks" android:key="ssl_unsafe" android:defaultValue="false"></CheckBoxPreference>
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Network" android:key="s5">
+    <PreferenceCategory android:title="@string/prefs_network" android:key="s5">
         
-	    <PreferenceScreen  android:title="Proxy Settings..." android:key="s5-1">
+	    <PreferenceScreen  android:title="@string/proxy_settings" android:key="s5-1">
 	        
-	        <PreferenceCategory android:title="Global Settings">
-	        	<Preference android:summary="" android:key="proxy_info" android:title="System Proxy Settings..."></Preference>
+	        <PreferenceCategory android:title="@string/prefs_global_settings">
+	        	<Preference android:summary="" android:key="proxy_info" android:title="@string/prefs_system_proxy_settings"></Preference>
 	        </PreferenceCategory>
 	        
-	        <PreferenceCategory android:title="Override Global Settings">
-		        <EditTextPreference android:key="proxy_host" android:title="Host"></EditTextPreference>
-		        <EditTextPreference android:key="proxy_port" android:title="Post"></EditTextPreference>
+	        <PreferenceCategory android:title="@string/prefs_override_global_settings">
+		        <EditTextPreference android:key="proxy_host" android:title="@string/prefs_host"></EditTextPreference>
+		        <EditTextPreference android:key="proxy_port" android:title="@string/prefs_port"></EditTextPreference>
 	        </PreferenceCategory>
 	        
-	        <PreferenceCategory android:title="Proxy Authentication">
-	            <EditTextPreference android:key="proxy_user" android:title="Username"></EditTextPreference>
-	        	<EditTextPreference android:key="proxy_password" android:title="Password"></EditTextPreference>
+	        <PreferenceCategory android:title="@string/prefs_proxy_auth">
+	            <EditTextPreference android:key="proxy_user" android:title="@string/username"></EditTextPreference>
+	        	<EditTextPreference android:key="proxy_password" android:title="@string/password"></EditTextPreference>
 	        </PreferenceCategory>
 	        
 	    </PreferenceScreen>
