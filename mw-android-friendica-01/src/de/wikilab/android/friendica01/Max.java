@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
+import de.wikilab.android.friendica01.activity.PreferencesActivity;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -176,7 +178,7 @@ public class Max {
 	public static void tryLogin(final Activity ctx) {
 		
 		final ProgressDialog pd = new ProgressDialog(ctx);
-		pd.setMessage("Logging in...");
+		pd.setMessage(ctx.getResources().getString(R.string.logging_in));
 		pd.show();		
 
 		String server = Max.getServer(ctx);

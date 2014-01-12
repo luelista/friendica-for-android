@@ -1,6 +1,9 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.adapter;
 
 import java.util.List;
+
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.R.drawable;
 
 import android.content.Context;
 import android.graphics.Color;

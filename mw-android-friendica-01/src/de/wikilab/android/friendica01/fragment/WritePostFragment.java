@@ -1,5 +1,12 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -28,6 +28,15 @@ import android.widget.WrapperListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
+import de.wikilab.android.friendica01.adapter.MessageContentAdapter;
+import de.wikilab.android.friendica01.adapter.MessageListAdapter;
 
 public class MessageViewFragment extends ContentFragment {
 	private static final String TAG="Friendica/MessageViewFragment";

@@ -1,10 +1,20 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
+
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.LoginListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
+import de.wikilab.android.friendica01.adapter.HtmlStringArrayAdapter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
