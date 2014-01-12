@@ -1,6 +1,10 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.adapter;
 
 import java.io.File;
+
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;

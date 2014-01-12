@@ -1,7 +1,16 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
+import de.wikilab.android.friendica01.adapter.PhotoGalleryAdapter;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

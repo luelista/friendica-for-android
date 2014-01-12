@@ -98,7 +98,7 @@
 
         <!-- ACTIVIIES -->
         <activity
-            android:name=".HomeActivity"
+            android:name="de.wikilab.android.friendica01.activity.HomeActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden" 
@@ -117,7 +117,7 @@
         </activity>        -->
 
         <activity
-            android:name=".GenericContentActivity"
+            android:name="de.wikilab.android.friendica01.activity.GenericContentActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden"
@@ -129,21 +129,21 @@
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
-            android:name=".UserProfileActivity"
+            android:name="de.wikilab.android.friendica01.activity.UserProfileActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
-            android:name=".MessageDetailActivity"
+            android:name="de.wikilab.android.friendica01.activity.MessageDetailActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
-            android:name=".PreferencesActivity"
+            android:name="de.wikilab.android.friendica01.activity.PreferencesActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".WritePostActivity"
+            android:name="de.wikilab.android.friendica01.activity.WritePostActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustResize"
@@ -156,7 +156,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FriendicaImgUploadActivity"
+            android:name="de.wikilab.android.friendica01.activity.FriendicaImgUploadActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" 
             android:configChanges="orientation">

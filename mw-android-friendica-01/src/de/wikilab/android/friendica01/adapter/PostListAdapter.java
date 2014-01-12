@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.adapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,6 +7,14 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.drawable;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.activity.UserProfileActivity;
 
 import android.content.Context;
 import android.content.Intent;

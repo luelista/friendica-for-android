@@ -1,5 +1,12 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.activity;
 
+import de.wikilab.android.friendica01.FileUploadService;
+import de.wikilab.android.friendica01.LoginListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.menu;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

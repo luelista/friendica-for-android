@@ -1,5 +1,11 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.activity;
 
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
+import de.wikilab.android.friendica01.fragment.WritePostFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

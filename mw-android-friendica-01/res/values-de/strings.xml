@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hallo Welt!</string>
+    <string name="timeline">Netzwerk</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="app_name">Friendica</string>
+    <string name="intf_fileupload2">Friendica</string>
+
+    <string name="loading_data">Lade&#8230;</string>
+    
+    <string name="protocol">Protokoll</string>
+    <string-array name="supported_protocols"> <!-- this is NOT dynamic! -->
+        <item>http</item><item>https</item>
+    </string-array>
+    <string name="server">Server</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="login">Einloggen</string>
+    <string name="logging_in">Du wirst eingeloggt</string>
+    
+    <string name="app_title_html">Friendica</string>
+    
+    <string name="upload_file">Ein Photo hochladen</string>
+    <string name="upload_now">Upload starten</string>
+    <string name="viewLatLon">Derzeitige Position teilen</string>
+    <string name="proxy_settings"><u>Proxy / SSL Einstellungen...</u></string>
+    <string name="post_status_update">Status teilen</string>
+    <string name="post">Teilen</string>
+    
+    
+	<string name="mm_timeline">Netzwerk</string>
+	<string name="mm_notifications">Benachrichtigungen</string>
+	<string name="mm_mywall">Pinnwand</string>
+	<string name="mm_myphotoalbums">Meine Photoalben</string>
+	<string name="mm_friends">Kontakte</string>
+	<string name="mm_directmessages">Nachrichten</string>
+	<string name="mm_updatemystatus">Status aktualisieren</string>
+	<string name="mm_takephoto">Photo aufnehmen und teilen</string>
+	<string name="mm_selectphoto">Photo auswählen und teilen</string>
+	<string name="mm_preferences">Einstellungen</string>
+	<string name="mm_logout">Ausloggen</string>
+	
+    <string name="fake_data_notice">HINWEIS: Da Friendica\&apos;s API momentan keine Photoalben unterstützt, sind hier lediglich Beispielphotos zu sehen. <i>(Antippen zum schliessen)</i></string>
+    
+    <string-array name="notification_intervals">
+        <item>alle 15 Minuten</item>	<item>jede halbe Stunde</item>	<item>einmal pro Stunde</item>
+        <item>alle 12 Stunden</item>		<item>einmal am Tag</item>
+    </string-array>
+    
+    <string-array name="notification_interval_values">
+        <item>900000</item>				<item>1800000</item>			<item>3600000</item>
+        <item>43200000</item>			<item>86400000</item>
+    </string-array>
+    
+</resources>
