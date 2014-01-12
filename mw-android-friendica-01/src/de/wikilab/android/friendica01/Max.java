@@ -58,6 +58,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+/**
+ * this is a historically grown and named class which contains all sorts of static helper functions
+ * m(
+ */
 public class Max {
 	private static final String TAG="Friendica/Max";
 	
@@ -171,7 +176,6 @@ public class Max {
     /**
 	 * 
 	 * @param ctx     MUST IMPLEMENT LoginListener !!!
-	 * @param errmes
 	 */
 	public static void tryLogin(final Activity ctx) {
 		
@@ -402,151 +406,6 @@ public class Max {
 
 
 
-	public static void setHtmlWithImages(TextView t, String html) {
-		// first parse the html
-		// replace getHtmlCode() with whatever generates/fetches your html
-		Spanned spanned = Html.fromHtml(html);
-		Spannable htmlSpannable;
-		
-		// we need a SpannableStringBuilder for later use
-		if (spanned instanceof SpannableStringBuilder) {
-			// for now Html.fromHtml() returns a SpannableStringBuiler
-			// so we can just cast it
-			htmlSpannable = (SpannableStringBuilder) spanned;
-		} else {
-			// but we have a fallback just in case this will change later
-			// or a custom subclass of Html is used
-			htmlSpannable = new SpannableStringBuilder(spanned);
-		}
-
-		// now we can call setText() on the next view.
-		// this won't show any images yet
-		t.setText(htmlSpannable);
-
-		// next we start a AsyncTask that loads the images
-		new ImageLoadTask(t.getContext(), htmlSpannable, t).execute();
-		
-	}
-
-	private static class ImageLoadTask extends AsyncTask<Void, Object, Void> {
-
-		private static final String TAG = "friendica01.Max.ImageLoadTask";
-		
-		DisplayMetrics metrics;
-		Spannable htmlSpannable;
-		Resources resources;
-		TextView htmlTextView;
-		TwAjax t;
-		
-		public ImageLoadTask(Context c, Spannable htmlSpannablep, TextView htmlTextViewp) {
-			htmlSpannable = htmlSpannablep;
-			htmlTextView = htmlTextViewp;
-			
-			// we need this to properly scale the images later
-			//c.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-			resources = c.getResources();
-			metrics = resources.getDisplayMetrics();
-			t= new TwAjax(c, true, false);
-		}
-		
-		@Override
-		protected void onPreExecute() {
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-
-			// iterate over all images found in the html
-			for (ImageSpan img : htmlSpannable.getSpans(0,
-					htmlSpannable.length(), ImageSpan.class)) {
-
-				Log.d(TAG, "Loading: "+img.getSource());
-				
-				File cachedFile = getImageFile(img);
-				if (!cachedFile.isFile()) {
-					t.urlDownloadToFile(img.getSource(), cachedFile.getAbsolutePath(), null);
-					Log.d(TAG, "Download done");
-				}
-
-				if (cachedFile.isFile()) {
-					Drawable d = new BitmapDrawable(resources, cachedFile.getAbsolutePath());
-					
-					// we use publishProgress to run some code on the
-					// UI thread to actually show the image
-					// -> onProgressUpdate()
-					publishProgress(img, d);
-				}
-
-			}
-
-			return null;
-
-		}
-
-		@Override
-		protected void onProgressUpdate(Object... values) {
-
-			// save ImageSpan to a local variable just for convenience
-			ImageSpan img = (ImageSpan) values[0];
-			Drawable d = (Drawable) values[1];
-
-			// now we get the File object again. so remeber to always return
-			// the same file for the same ImageSpan object
-			File cache = getImageFile(img);
-
-			// if the file exists, show it
-			//if (cache.isFile()) {
-
-				Log.d(TAG, "File OK");
-				
-				// first we need to get a Drawable object
-				//Drawable d = new BitmapDrawable(resources, cache.getAbsolutePath());
-				
-				// next we do some scaling
-				int width, height;
-				int originalWidthScaled = (int) (d.getIntrinsicWidth() * metrics.density);
-				int originalHeightScaled = (int) (d.getIntrinsicHeight() * metrics.density);
-				if (originalWidthScaled > metrics.widthPixels) {
-					height = d.getIntrinsicHeight() * metrics.widthPixels
-							/ d.getIntrinsicWidth();
-					width = metrics.widthPixels;
-				} else {
-					height = originalHeightScaled;
-					width = originalWidthScaled;
-				}
-
-				// it's important to call setBounds otherwise the image will
-				// have a size of 0px * 0px and won't show at all
-				d.setBounds(0, 0, width, height);
-
-				// now we create a new ImageSpan
-				ImageSpan newImg = new ImageSpan(d, img.getSource());
-
-				// find the position of the old ImageSpan
-				int start = htmlSpannable.getSpanStart(img);
-				int end = htmlSpannable.getSpanEnd(img);
-
-				// remove the old ImageSpan
-				htmlSpannable.removeSpan(img);
-
-				// add the new ImageSpan
-				htmlSpannable.setSpan(newImg, start, end,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-				//finally we have to update the TextView with our
-				// updates Spannable to display the image
-				htmlTextView.setText(htmlSpannable);
-			//} else {
-			//	Log.e(TAG, "File NOT FOUND = Download error");
-				
-			//}
-		}
-
-		private File getImageFile(ImageSpan img) {
-			return new File(IMG_CACHE_DIR + "/url_" + Max.cleanFilename(img.getSource()));
-		}
-
-	}
 
 	public static String cleanFilename(String url) {
 		return url.replaceAll("[^a-z0-9.-]", "_");

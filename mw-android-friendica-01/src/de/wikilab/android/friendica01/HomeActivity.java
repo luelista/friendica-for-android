@@ -26,9 +26,26 @@ import android.widget.TextView;
 
 import com.google.android.gcm.GCMRegistrar;
 
+
+/**
+ * This activity is the application's most important one. It is visible almost
+ * all the time (exceptions: Login Screen, Preferences).
+ * Everything else is loaded into this activity via Android's fragment mechanism.
+ * On small screens, the "menu fragment" (class MainMenuFragment) is slided over
+ * the currently visible "view fragment". On large screens (tablets), both Fragments
+ * are displayed next to each other.
+ *
+ * @see res/layout/homeactivity.xml
+ * @see res/layout-large/homeactivity.xml
+ */
 public class HomeActivity extends FragmentActivity implements FragmentParentListener, LoginListener {
 	private static final String TAG="Friendica/HomeActivity";
 
+    /**
+     * Sender ID for Google's Cloud Messaging service. Maybe this should be configurable,
+     * so everybody is able to set up their own account at google.
+     * The server administrator has to set this up for their Friendica node.
+     */
 	public final static String SENDER_ID = "179387721673";
 
 	public static final int RQ_SELECT_PHOTO = 44;
@@ -65,7 +82,7 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 			// on a large screen device ...
 			isLargeMode = true;
 		}
-	
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String userName = prefs.getString("login_user", null);
 		if (userName == null || userName.length() < 1) {
@@ -79,6 +96,8 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 				currentMMItem = savedInstanceState.getString("currentMMItem");
 				if (currentMMItem != null) navigate(currentMMItem);
 			}
+
+            //--> Google Cloud Messaging
 			try {
                 GCMRegistrar.checkDevice(this);
                 GCMRegistrar.checkManifest(this);
@@ -188,9 +207,11 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 
 	}
 
+
+    // This method is used to pass messages from the child fragments to methods in this activity
+    //
 	@Override
 	public void OnFragmentMessage(String message, Object arg1, Object arg2) {
-
 		if (message.equals("Set Header Text")) {
 			setHeadertext((String) arg1);
 		}
@@ -206,37 +227,20 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	}
 
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch(requestCode) {
-		case RQ_SELECT_PHOTO:
-			if (resultCode == RESULT_OK) {
-				Intent in = new Intent(HomeActivity.this, FriendicaImgUploadActivity.class);
-				in.putExtra(Intent.EXTRA_STREAM, data.getData());
-				startActivity(in);
-			}
-			break;
-		case RQ_TAKE_PHOTO:
-			if (resultCode == RESULT_OK) {
-				//Log.e("INTENT=",data==null?"NULL":"not null");
-				Intent in = new Intent(HomeActivity.this, FriendicaImgUploadActivity.class);
-				in.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(takePhotoTarget));
-				//in.putExtra(Intent.EXTRA_STREAM, data.getData());
-				startActivity(in);
-			}
-			break;
-		default:
-			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
 
-	void onNavMainFragment()  {
-		if (!isLargeMode) {
-			View leftBar = findViewById(R.id.left_bar);
-				leftBar.setVisibility(View.GONE);
-		}
-	}
-	
+    //region Methods called by OnFragmentMessage
+
+    void setHeadertext(String ht) {
+        TextView subheading = (TextView) findViewById(R.id.header_text);
+
+        if (subheading != null) subheading.setText(ht);
+    }
+
+    /**
+     * This is the main entry point for loading new contents into the "view fragment".
+     * Called by MainMenuFragment via OnFragmentMessage
+     * @param arg1   Display name of the content view fragment to load
+     */
 	void navigate(String arg1) {
 		currentMMItem = arg1;
 
@@ -297,11 +301,17 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 
 	}
 
-	void setHeadertext(String ht) {
-		TextView subheading = (TextView) findViewById(R.id.header_text);
+    void onNavMainFragment()  {
+        if (!isLargeMode) {
+            View leftBar = findViewById(R.id.left_bar);
+            leftBar.setVisibility(View.GONE);
+        }
+    }
 
-		if (subheading != null) subheading.setText(ht);
-	}
+
+    // These functions (navigate...) are called by navigate(arg1), which is mostly
+    // called by the main menu, or directly by other fragments to load specific content
+    // (like direct messages or conversations) by its id
 
 	private void navigateMainFragment(ContentFragment newFragment, String target) {
 		onNavMainFragment();
@@ -344,6 +354,8 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 
 
 	private void navigatePreferences() {
+        // I wanted to display the preferences inside MainActivity as well, but Android doesn't like this :(
+
 		/*if (! isMultiCol()) {*/
 		Intent showContent = new Intent(getApplicationContext(), PreferencesActivity.class);
 		//showContent.putExtra("target", listTarget);
@@ -374,6 +386,11 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 		frag_postdetail.navigate("post:" + postId);
 	}
 */
+    //endregion
+
+
+    // This is called by Max.tryLogin after login succeeded and forwards this event to the main
+    // menu (refresh numbers of timeline posts, notifications, etc).
 	@Override
 	public void OnLogin() {
 		LoginListener target = (LoginListener) getSupportFragmentManager().findFragmentById(R.id.menu_fragment);
@@ -381,6 +398,11 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 
 	}
 
+
+    // When the "back button" is pressed:
+    // - hide the menu if visible
+    // - let the content view fragment do something
+    // - if none of these were appropriate: pass back button to the system (probably closing the app)
 	@Override
 	public void onBackPressed() {
 		if (!isLargeMode) {
