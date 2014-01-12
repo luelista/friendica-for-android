@@ -1,3 +1,4 @@
+package de.wikilab.android.friendica01.activity;
 /*package de.wikilab.android.friendica01;
 import android.app.ActivityGroup;
 import android.app.LocalActivityManager;

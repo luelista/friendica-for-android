@@ -1,5 +1,5 @@
 
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +28,16 @@ import android.widget.WrapperListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.Notification;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.Notification.NotificationsListAdapter;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.R.string;
+import de.wikilab.android.friendica01.adapter.PostListAdapter;
 
 public class PostListFragment extends ContentFragment {
 	private static final String TAG="Friendica/PostListFragment";
@@ -145,13 +155,13 @@ public class PostListFragment extends ContentFragment {
 		loadFinished = false;
 		
 		SendMessage("Loading Animation", Integer.valueOf(View.VISIBLE), null);
-		if (target != null && target.equals("mywall")) {
+		if (target != null && target.equals(getString(R.string.mm_mywall))) {
 			SendMessage("Set Header Text", getString(R.string.mm_mywall), null);
 			loadWall(null);
 		} else if (target != null && target.startsWith("userwall:")) {
 			SendMessage("Set Header Text", getString(R.string.mm_mywall), null);
 			loadWall(target.substring(9));
-		} else if (target != null && target.equals("notifications")) {
+		} else if (target != null && target.equals(getString(R.string.mm_notifications))) {
 			SendMessage("Set Header Text", getString(R.string.mm_notifications), null);
 			loadNotifications();
 		} else {

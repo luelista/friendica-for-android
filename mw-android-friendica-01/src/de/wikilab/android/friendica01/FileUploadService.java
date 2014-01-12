@@ -9,6 +9,8 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.wikilab.android.friendica01.activity.FriendicaImgUploadActivity;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;

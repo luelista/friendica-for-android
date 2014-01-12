@@ -94,7 +94,7 @@
 
         <fragment
             android:id="@+id/menu_fragment"
-            android:name="de.wikilab.android.friendica01.MainMenuFragment"
+            android:name="de.wikilab.android.friendica01.fragment.MainMenuFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
         </fragment>

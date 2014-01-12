@@ -1,7 +1,8 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+import de.wikilab.android.friendica01.FragmentParentListener;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.view.View;
 public abstract class ContentFragment extends Fragment {
 	private static final String TAG="Friendica/ContentFragment";
 	
-	View myView;
+	protected View myView;
 	
 	String navigateOrder = null;
 	

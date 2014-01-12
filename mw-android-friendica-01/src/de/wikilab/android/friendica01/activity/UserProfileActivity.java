@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.activity;
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -6,6 +6,15 @@ import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.fragment.ContentFragment;
+import de.wikilab.android.friendica01.fragment.PostListFragment;
 
 import android.content.Intent;
 import android.net.Uri;
