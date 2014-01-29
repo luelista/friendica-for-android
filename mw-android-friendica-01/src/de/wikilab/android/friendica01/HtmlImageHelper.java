@@ -205,7 +205,7 @@ class HtmlImageHelper extends AsyncTask<Void, Object, Void> {
     }
 
     private File getImageFile(ImageSpan img) {
-        return new File(IMG_CACHE_DIR + "/url_" + Max.cleanFilename(img.getSource()));
+        return new File(Max.IMG_CACHE_DIR + "/url_" + Max.cleanFilename(img.getSource()));
     }
 
 }

@@ -65,13 +65,12 @@ import android.widget.Toast;
  */
 public class Max {
 	private static final String TAG="Friendica/Max";
-	
-
 
 	public static final String DATA_DIR = "/sdcard/Android/data/de.wikilab.android.friendica01";
-	public static final String IMG_CACHE_DIR = DATA_DIR + "/cache/imgs";
-	
-	public static PendingIntent piTimerNotifications;
+    public static final String IMG_CACHE_DIR = Max.DATA_DIR + "/cache/imgs";
+
+
+    public static PendingIntent piTimerNotifications;
 	
 	public static void initDataDirs() {
 		new File(DATA_DIR).mkdirs();
@@ -174,7 +173,9 @@ public class Max {
 	}
     
     /**
-	 * 
+	 * Calls the api method <code>verify_credentials</code> with the login data
+     * saved in the <code>SharedPreferences</code>. Calls ctx.OnLogin on success,
+     * showLoginForm(ctx, "error") on error
 	 * @param ctx     MUST IMPLEMENT LoginListener !!!
 	 */
 	public static void tryLogin(final Activity ctx) {
@@ -215,17 +216,17 @@ public class Max {
 							}
 							
 						} else {
-							showLoginForm(ctx, "Error:"+t.getResult());
+							showLoginForm(ctx, "Error: "+t.getResult());
 						}
 					} else {
 						Log.w(TAG, "... tryLogin - request failed");
-						showLoginForm(ctx, "ERR:"+t.getError().toString());
+						showLoginForm(ctx, "ERR: "+t.getError().toString());
 					}
 					
 				} catch(Exception ex) {
 					Log.w(TAG, "... tryLogin - exception:");
 					ex.printStackTrace();
-					showLoginForm(ctx, "ERR2:"+t.getResult()+ex.toString());
+					showLoginForm(ctx, "ERR2: "+t.getResult()+ex.toString());
 					
 				}
 			}
@@ -233,9 +234,10 @@ public class Max {
 	}
 	
 	/**
-	 * 
+	 * displays the login form (layout/loginscreen.xml) as a modal dialog and calls tryLogin
+     * when user confirms the form
 	 * @param ctx     MUST IMPLEMENT LoginListener !!!
-	 * @param errmes
+	 * @param errmes  message which is displayed above the Login form (e.g. "wrong password entered")
 	 */
 	public static void showLoginForm(final Activity ctx, String errmes) {
 		Log.v(TAG, "... showLoginForm");
@@ -355,17 +357,17 @@ public class Max {
 
 
 
-	/** 
+    private static final int IO_BUFFER_SIZE = 4 * 1024;
+    /**
 	 * Copy the content of the input stream into the output stream, using a temporary 
-	 * byte array buffer whose size is defined by {@link #IO_BUFFER_SIZE}. 
+	 * byte array buffer whose size is defined by {@link #IO_BUFFER_SIZE}.
 	 * 
 	 * @param in The input stream to copy from. 
 	 * @param out The output stream to copy to. 
 	 * 
 	 * @throws IOException If any error occurs during the copy. 
 	 */  
-	public static void copy(InputStream in, OutputStream out) throws IOException {  
-		final int IO_BUFFER_SIZE = 4 * 1024;  
+	public static void copy(InputStream in, OutputStream out) throws IOException {
 		byte[] b = new byte[IO_BUFFER_SIZE];  
 		int read;
 		while ((read = in.read(b)) != -1) {  
