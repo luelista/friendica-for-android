@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.adapter.PostListAdapter;
 
 public class PostDetailFragment extends ContentFragment {
 	private static final String TAG="Friendica/PostDetailFragment";

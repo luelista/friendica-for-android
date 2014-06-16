@@ -1,5 +1,7 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.fragment;
 
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.R.layout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

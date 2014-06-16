@@ -1,4 +1,4 @@
-package de.wikilab.android.friendica01;
+package de.wikilab.android.friendica01.activity;
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gcm.GCMRegistrar;
-
+import de.wikilab.android.friendica01.FragmentParentListener;
+import de.wikilab.android.friendica01.LoginListener;
+import de.wikilab.android.friendica01.Max;
+import de.wikilab.android.friendica01.R;
+import de.wikilab.android.friendica01.TwAjax;
+import de.wikilab.android.friendica01.R.anim;
+import de.wikilab.android.friendica01.R.id;
+import de.wikilab.android.friendica01.R.layout;
+import de.wikilab.android.friendica01.fragment.ContentFragment;
+import de.wikilab.android.friendica01.fragment.FriendListFragment;
+import de.wikilab.android.friendica01.fragment.MessageViewFragment;
+import de.wikilab.android.friendica01.fragment.PhotoGalleryFragment;
+import de.wikilab.android.friendica01.fragment.PostDetailFragment;
+import de.wikilab.android.friendica01.fragment.PostListFragment;
+import de.wikilab.android.friendica01.fragment.WritePostFragment;
 
 /**
  * This activity is the application's most important one. It is visible almost
@@ -91,7 +105,8 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 			Max.tryLogin(this);
 			
 			if (savedInstanceState == null) {
-				navigate("Timeline");
+				Log.v(TAG, "SaveInstanceState is null");
+				navigate(getResources().getString(R.string.mm_timeline));
 			} else {
 				currentMMItem = savedInstanceState.getString("currentMMItem");
 				if (currentMMItem != null) navigate(currentMMItem);
@@ -244,52 +259,52 @@ public class HomeActivity extends FragmentActivity implements FragmentParentList
 	void navigate(String arg1) {
 		currentMMItem = arg1;
 
-		if (arg1.equals("Timeline")) {
-			navigatePostList("timeline");
+		if (arg1.equals(getResources().getString(R.string.mm_timeline))) {
+			navigatePostList(getResources().getString(R.string.mm_timeline));
 		}
 
-		if (arg1.equals("Notifications")) {
-			navigatePostList("notifications");
+		if (arg1.equals(getResources().getString(R.string.mm_notifications))) {
+			navigatePostList(getResources().getString(R.string.mm_notifications));
 		}
 
-		if (arg1.equals("My Wall")) {
-			navigatePostList("mywall");
+		if (arg1.equals(getResources().getString(R.string.mm_mywall))) {
+			navigatePostList(getResources().getString(R.string.mm_mywall));
 		}
 
-		if (arg1.equals("Update My Status")) {
+		if (arg1.equals(getResources().getString(R.string.mm_updatemystatus))) {
 			navigateStatusUpdate();
 		}
 
-		if (arg1.equals("Friends")) {
+		if (arg1.equals(getResources().getString(R.string.mm_friends))) {
 			navigateFriendList();
 		}
 
-		if (arg1.equals("My Photo Albums")) {
-			navigatePhotoGallery("myalbums");
+		if (arg1.equals(getResources().getString(R.string.mm_myphotoalbums))) {
+			navigatePhotoGallery(getResources().getString(R.string.mm_myphotoalbums));
 		}
 
-		if (arg1.equals("Take Photo And Upload")) {
+		if (arg1.equals(getResources().getString(R.string.mm_takephoto))) {
 			Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			takePhotoTarget = Max.getTempFile();
 			in.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(takePhotoTarget));
 			startActivityForResult(in, RQ_TAKE_PHOTO);
 		}
-		if (arg1.equals("Select Photo And Upload")) {
+		if (arg1.equals(getResources().getString(R.string.mm_selectphoto))) {
 			Intent in = new Intent(Intent.ACTION_PICK);
 			in.setType("image/*");
 			startActivityForResult(in, RQ_SELECT_PHOTO);
 		}
-		if (arg1.equals("Messages")) {
+		if (arg1.equals(getResources().getString(R.string.mm_directmessages))) {
 			//Intent in = new Intent(HomeActivity.this, MessagesActivity.class);
 			//startActivity(in);
 			navigateMessages("msg:all");
 		}
 
-		if (arg1.equals("Preferences")) {
+		if (arg1.equals(getResources().getString(R.string.mm_preferences))) {
 			navigatePreferences();
 		}
 
-		if (arg1.equals("Log Out")) {
+		if (arg1.equals(getResources().getString(R.string.mm_logout))) {
 			SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this).edit();
 			//prefs.putString("login_server", null); //keep server and user ...
 			prefs.putString("login_user", null);

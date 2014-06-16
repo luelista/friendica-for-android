@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
+import de.wikilab.android.friendica01.activity.HomeActivity;
+
 public class GCMIntentService extends GCMBaseIntentService {
 	private static final String TAG = "Friendica.GCMIntentService";
 	
