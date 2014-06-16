@@ -112,8 +112,6 @@ public class FriendicaImgUploadActivity extends Activity implements LoginListene
 				
 				//txtFilename.setText(Max.getBaseName(fileSpec));
 				
-				t.setText("Andfrnd Uploader Beta\n\n[b]URI:[/b] " + fileToUpload.toString() + "\n[b]File name:[/b] " + fileSpec);
-				
 				deleteAfterUpload = false;
 				
 				// restore data after failed upload:
